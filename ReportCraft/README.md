@@ -125,14 +125,4 @@ YDC_API_KEY = "your_you_api_key"  # for You.com search
 BING_SEARCH_API_KEY = "your_bing_key"  # for Bing search
 ```
 
-## License
 
-MIT License
-
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
----
-
-Built with ❤️ by the ReportCraft team.
