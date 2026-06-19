@@ -1,0 +1,35 @@
+{
+  "name": "zephryn",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zephryn — AI-Powered Research Platform. Transform any topic into comprehensive, well-cited research reports.",
+  "author": "Zephryn Team",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@headlessui/react": "^2.2.1",
+    "docx": "^9.6.1",
+    "file-saver": "^2.0.5",
+    "framer-motion": "^12.4.10",
+    "lucide-react": "^0.479.0",
+    "next": "16.1.7",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-hot-toast": "^2.5.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.7",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
