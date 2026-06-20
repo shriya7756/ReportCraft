@@ -1,4 +1,3 @@
 [build]
-  base = "frontend/zephryn"
-  command = "npm i && npm run build"
-  publish = "out"
+  command = "cd frontend/zephryn && npm i && npm run build"
+  publish = "frontend/zephryn/out"
