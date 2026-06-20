@@ -1,3 +1,16 @@
 [build]
   command = "cd frontend/zephryn && npm i && npm run build"
   publish = "frontend/zephryn/out"
+
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/api/research"
+  to = "/.netlify/functions/research"
+  status = 200
+
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
