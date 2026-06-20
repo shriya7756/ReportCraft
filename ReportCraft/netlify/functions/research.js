@@ -12,27 +12,16 @@ exports.handler = async (event) => {
     };
   }
 
-  const apiKey = process.env.PERPLEXITY_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Perplexity API key not configured. Please add PERPLEXITY_API_KEY to your Netlify environment variables." }),
+      body: JSON.stringify({ error: "Gemini API key not configured. Please add GEMINI_API_KEY to your Netlify environment variables." }),
     };
   }
 
   try {
-    const response = await fetch("https://api.perplexity.ai/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "sonar-pro",
-        messages: [
-          {
-            role: "system",
-            content: `You are an elite research scientist and academic writer. Generate a comprehensive, deeply analytical research report. Structure your response in clearly separated sections using double newlines between each section. Follow this exact structure:
+    const systemPrompt = `You are an elite research scientist and academic writer. Generate a comprehensive, deeply analytical research report. Structure your response in clearly separated sections using double newlines between each section. Follow this exact structure:
 
 ABSTRACT: A concise but dense summary of the topic's current state, key findings, and significance (2-3 paragraphs).
 
@@ -42,28 +31,52 @@ ANALYSIS: Deep multi-faceted analysis of the topic. Cover the key developments, 
 
 CONCLUSION: Synthesize the key takeaways, open problems, and what the scientific community should focus on next.
 
-Write with authority, precision, and depth appropriate for a research scientist audience. Cite specific studies, papers, and findings where applicable.`,
-          },
-          {
-            role: "user",
-            content: `Conduct a comprehensive research investigation on: "${topic}"\n\nSearch the web thoroughly for the most recent and relevant scientific literature, papers, datasets, and developments. Generate a full research report structured as: Abstract, Methodology, Analysis, and Conclusion.`,
-          },
+Write with authority, precision, and depth appropriate for a research scientist audience.`;
+
+    const userPrompt = `Conduct a comprehensive research investigation on: "${topic}"\n\nSearch the web thoroughly for the most recent and relevant scientific literature, papers, datasets, and developments. Generate a full research report structured as: Abstract, Methodology, Analysis, and Conclusion.`;
+
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contents: [
+          { role: "user", parts: [{ text: userPrompt }] }
         ],
-        max_tokens: 4000,
-        temperature: 0.2,
-        return_citations: true,
-        search_recency_filter: "year",
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        },
+        tools: [
+          { googleSearch: {} }
+        ],
+        generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 4000
+        }
       }),
     });
 
     if (!response.ok) {
       const errText = await response.text();
-      throw new Error(`Perplexity API error: ${response.status} — ${errText}`);
+      throw new Error(`Gemini API error: ${response.status} — ${errText}`);
     }
 
     const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || "";
-    const citations = data.citations || [];
+    const candidate = data.candidates?.[0];
+    const content = candidate?.content?.parts?.[0]?.text || "";
+    
+    // Extract sources from Google Search grounding metadata
+    const groundingChunks = candidate?.groundingMetadata?.groundingChunks || [];
+    const citations = [];
+    groundingChunks.forEach(chunk => {
+      if (chunk.web && chunk.web.uri) {
+        citations.push({
+            url: chunk.web.uri,
+            title: chunk.web.title || chunk.web.uri
+        });
+      }
+    });
 
     // Parse sections from content
     const sections = content.split(/\n\n+/);
@@ -74,30 +87,29 @@ Write with authority, precision, and depth appropriate for a research scientist 
       if (idx === -1) return sections[Math.min(sections.length - 1, 0)] || "";
       // return the section text, stripping the keyword header
       const raw = sections[idx];
-      const stripped = raw.replace(/^(ABSTRACT|METHODOLOGY|ANALYSIS|CONCLUSION)[:\s]*/i, "").trim();
-      // Also include next section if it's continuation
+      const stripped = raw.replace(/^(ABSTRACT|METHODOLOGY|ANALYSIS|CONCLUSION|\*\*ABSTRACT\*\*|\*\*METHODOLOGY\*\*|\*\*ANALYSIS\*\*|\*\*CONCLUSION\*\*)[:\s]*/i, "").trim();
       return stripped || sections[idx + 1] || "";
     };
 
-    const abstract = findSection(["ABSTRACT"]);
-    const methodology = findSection(["METHODOLOGY"]);
-    const analysis = findSection(["ANALYSIS", "DEEP ANALYSIS"]);
-    const conclusion = findSection(["CONCLUSION"]);
+    const abstract = findSection(["ABSTRACT", "**ABSTRACT**"]);
+    const methodology = findSection(["METHODOLOGY", "**METHODOLOGY**"]);
+    const analysis = findSection(["ANALYSIS", "DEEP ANALYSIS", "**ANALYSIS**", "**DEEP ANALYSIS**"]);
+    const conclusion = findSection(["CONCLUSION", "**CONCLUSION**"]);
 
     // Map citations to source cards
-    const sources = citations.slice(0, 8).map((url, i) => {
+    const sources = citations.slice(0, 8).map((cite, i) => {
       let domain = "";
       try {
-        domain = new URL(url).hostname.replace("www.", "");
+        domain = new URL(cite.url).hostname.replace("www.", "");
       } catch {
-        domain = url;
+        domain = cite.url;
       }
       return {
         id: i + 1,
-        title: `Source ${i + 1}: ${domain}`,
+        title: cite.title,
         pub: domain,
         type: "Web Source",
-        url: url,
+        url: cite.url,
         snippet: `Referenced in research synthesis for "${topic}".`,
         keywords: [topic],
       };
