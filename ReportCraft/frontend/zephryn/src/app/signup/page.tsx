@@ -50,7 +50,8 @@ export default function SignupPage() {
                 <input 
                   type="email" 
                   required
-                  className="zephyr-input w-full pl-12"
+                  className="zephyr-input w-full"
+                  style={{ paddingLeft: '48px' }}
                   placeholder="name@archive.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -66,7 +67,8 @@ export default function SignupPage() {
                   <input 
                     type="password" 
                     required
-                    className="zephyr-input w-full pl-12"
+                    className="zephyr-input w-full"
+                    style={{ paddingLeft: '48px' }}
                     placeholder="••••••••"
                     value={pass}
                     onChange={(e) => setPass(e.target.value)}
@@ -80,7 +82,8 @@ export default function SignupPage() {
                   <input 
                     type="password" 
                     required
-                    className="zephyr-input w-full pl-12"
+                    className="zephyr-input w-full"
+                    style={{ paddingLeft: '48px' }}
                     placeholder="••••••••"
                     value={confirm}
                     onChange={(e) => setConfirm(e.target.value)}

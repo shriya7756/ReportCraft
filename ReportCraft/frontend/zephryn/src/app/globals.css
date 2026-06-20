@@ -350,15 +350,20 @@ h1, h2, h3, .font-display {
     ═══════════════════════════════════════════ */
  
  .zephyr-input {
-   width: 100%;
-   background: var(--surface);
-   border: 1px solid var(--border);
-   border-radius: var(--z-radius-md);
-   padding: 14px 20px;
-   color: var(--text-primary);
-   font-weight: 500;
-   transition: all var(--z-duration) var(--z-transition);
- }
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--z-radius-md);
+    padding: 14px 20px;
+    color: var(--text-primary);
+    font-weight: 500;
+    transition: all var(--z-duration) var(--z-transition);
+  }
+
+  .zephyr-input.has-icon-left,
+  .zephyr-input[class*="pl-12"] {
+    padding-left: 48px;
+  }
 
  .dark .zephyr-input {
    background: rgba(255, 255, 255, 0.03);

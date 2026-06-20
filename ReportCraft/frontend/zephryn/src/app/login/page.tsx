@@ -44,7 +44,8 @@ export default function LoginPage() {
                 <input 
                   type="email" 
                   required
-                  className="zephyr-input w-full pl-12"
+                  className="zephyr-input w-full"
+                  style={{ paddingLeft: '48px' }}
                   placeholder="name@nexus.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -59,7 +60,8 @@ export default function LoginPage() {
                 <input 
                   type="password" 
                   required
-                  className="zephyr-input w-full pl-12"
+                  className="zephyr-input w-full"
+                  style={{ paddingLeft: '48px' }}
                   placeholder="••••••••"
                   value={pass}
                   onChange={(e) => setPass(e.target.value)}
