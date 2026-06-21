@@ -23,7 +23,7 @@ exports.handler = async (event) => {
   try {
     const systemPrompt = `You are Zephryn, an elite AI research scientist with deep expertise. The user has just completed research on the topic: "${topic}". Answer their follow-up questions with scientific precision, citing sources and providing data-backed insights. Be concise but highly informative.`;
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

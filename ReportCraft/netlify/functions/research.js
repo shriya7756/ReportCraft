@@ -35,7 +35,7 @@ Write with authority, precision, and depth appropriate for a research scientist 
 
     const userPrompt = `Conduct a comprehensive research investigation on: "${topic}"\n\nSearch the web thoroughly for the most recent and relevant scientific literature, papers, datasets, and developments. Generate a full research report structured as: Abstract, Methodology, Analysis, and Conclusion.`;
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
