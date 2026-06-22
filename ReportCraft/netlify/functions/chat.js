@@ -12,46 +12,38 @@ exports.handler = async (event) => {
     };
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.COHERE_API_KEY;
   if (!apiKey) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Gemini API key not configured." }),
+      body: JSON.stringify({ error: "Cohere API key not configured." }),
     };
   }
 
   try {
     const systemPrompt = `You are Zephryn, an elite AI research scientist with deep expertise. The user has just completed research on the topic: "${topic}". Answer their follow-up questions with scientific precision, citing sources and providing data-backed insights. Be concise but highly informative.`;
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+    const response = await fetch('https://api.cohere.ai/v1/chat', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        contents: [
-          { role: "user", parts: [{ text: message }] }
-        ],
-        systemInstruction: {
-          parts: [{ text: systemPrompt }]
-        },
-        tools: [
-          { googleSearch: {} }
-        ],
-        generationConfig: {
-            temperature: 0.3,
-            maxOutputTokens: 1000
-        }
+        message: message,
+        model: "command-r-plus",
+        preamble: systemPrompt,
+        connectors: [{"id": "web-search"}],
+        temperature: 0.3
       }),
     });
 
     if (!response.ok) {
-      throw new Error(`Gemini API error: ${response.status}`);
+      throw new Error(`Cohere API error: ${response.status}`);
     }
 
     const data = await response.json();
-    const candidate = data.candidates?.[0];
-    const content = candidate?.content?.parts?.[0]?.text || "Unable to generate response.";
+    const content = data.text || "Unable to generate response.";
 
     return {
       statusCode: 200,

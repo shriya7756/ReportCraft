@@ -12,11 +12,11 @@ exports.handler = async (event) => {
     };
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.COHERE_API_KEY;
   if (!apiKey) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Gemini API key not configured. Please add GEMINI_API_KEY to your Netlify environment variables." }),
+      body: JSON.stringify({ error: "Cohere API key not configured. Please add COHERE_API_KEY to your Netlify environment variables." }),
     };
   }
 
@@ -35,48 +35,35 @@ Write with authority, precision, and depth appropriate for a research scientist 
 
     const userPrompt = `Conduct a comprehensive research investigation on: "${topic}"\n\nSearch the web thoroughly for the most recent and relevant scientific literature, papers, datasets, and developments. Generate a full research report structured as: Abstract, Methodology, Analysis, and Conclusion.`;
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+    const response = await fetch('https://api.cohere.ai/v1/chat', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        contents: [
-          { role: "user", parts: [{ text: userPrompt }] }
-        ],
-        systemInstruction: {
-          parts: [{ text: systemPrompt }]
-        },
-        tools: [
-          { googleSearch: {} }
-        ],
-        generationConfig: {
-            temperature: 0.2,
-            maxOutputTokens: 4000
-        }
+        message: userPrompt,
+        model: "command-r-plus",
+        preamble: systemPrompt,
+        connectors: [{"id": "web-search"}],
+        temperature: 0.2
       }),
     });
 
     if (!response.ok) {
       const errText = await response.text();
-      throw new Error(`Gemini API error: ${response.status} — ${errText}`);
+      throw new Error(`Cohere API error: ${response.status} — ${errText}`);
     }
 
     const data = await response.json();
-    const candidate = data.candidates?.[0];
-    const content = candidate?.content?.parts?.[0]?.text || "";
+    const content = data.text || "";
     
-    // Extract sources from Google Search grounding metadata
-    const groundingChunks = candidate?.groundingMetadata?.groundingChunks || [];
-    const citations = [];
-    groundingChunks.forEach(chunk => {
-      if (chunk.web && chunk.web.uri) {
-        citations.push({
-            url: chunk.web.uri,
-            title: chunk.web.title || chunk.web.uri
-        });
-      }
-    });
+    // Extract sources from Cohere's documents
+    const documents = data.documents || [];
+    const citations = documents.map(doc => ({
+      url: doc.url,
+      title: doc.title || doc.url
+    }));
 
     // Parse sections from content
     const sections = content.split(/\n\n+/);

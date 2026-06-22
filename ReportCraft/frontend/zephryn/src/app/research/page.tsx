@@ -74,7 +74,7 @@ function ResearchContent() {
     setChatMessages([]);
 
     const phases = [
-      { label: "Connecting to Google Gemini Search Network...", p: 10 },
+      { label: "Connecting to Cohere Knowledge Network...", p: 10 },
       { label: "Scouring scientific databases and web sources...", p: 30 },
       { label: "Cross-referencing literature and citations...", p: 55 },
       { label: "Synthesizing multi-source knowledge graph...", p: 80 },
@@ -152,10 +152,10 @@ function ResearchContent() {
           : [
               {
                 id: 1,
-                title: "Google Gemini Synthesis",
-                pub: "google.com",
+                title: "Cohere Research Synthesis",
+                pub: "cohere.com",
                 type: "AI Research Engine",
-                url: "https://gemini.google.com",
+                url: "https://cohere.com",
                 snippet: "Real-time web research synthesis.",
                 keywords: [topic],
               },
@@ -282,7 +282,7 @@ function ResearchContent() {
                   Pure <span className="gradient-text">Inquiry.</span>
                 </motion.h1>
                 <p className="text-xl text-[var(--text-secondary)] font-medium max-w-lg mx-auto opacity-70">
-                  Real-time web research powered by Google Gemini AI. Enter any
+                  Real-time web research powered by Cohere Command R+. Enter any
                   topic and get a comprehensive research report with live citations.
                 </p>
               </div>
@@ -310,7 +310,7 @@ function ResearchContent() {
                     Launch Research <ArrowRight size={22} />
                   </button>
                   <p className="text-center text-xs text-white/20 mt-4 font-medium">
-                    Powered by Gemini 2.5 Pro · Real-time web sources
+                    Powered by Cohere Command R+ · Real-time web sources
                   </p>
                 </div>
               </div>
