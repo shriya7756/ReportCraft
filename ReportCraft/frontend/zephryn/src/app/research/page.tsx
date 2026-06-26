@@ -74,18 +74,23 @@ function ResearchContent() {
     setChatMessages([]);
 
     const phases = [
-      { label: "Connecting to Cohere Knowledge Network...", p: 10 },
+      { label: "Connecting to Zephryn Knowledge Network...", p: 10 },
       { label: "Scouring scientific databases and web sources...", p: 30 },
       { label: "Cross-referencing literature and citations...", p: 55 },
       { label: "Synthesizing multi-source knowledge graph...", p: 80 },
       { label: "Compiling final research report...", p: 95 },
     ];
 
+    // AbortController so we never hang forever (30 second hard limit)
+    const controller = new AbortController();
+    const hardTimeout = setTimeout(() => controller.abort(), 30000);
+
     // Start backend call immediately
     const backendPromise = fetch("/api/research", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ topic: topic.trim() }),
+      signal: controller.signal,
     });
 
     // Animate progress in parallel
@@ -97,6 +102,7 @@ function ResearchContent() {
 
     try {
       const response = await backendPromise;
+      clearTimeout(hardTimeout);
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
@@ -152,11 +158,11 @@ function ResearchContent() {
           : [
               {
                 id: 1,
-                title: "Cohere Research Synthesis",
-                pub: "cohere.com",
+                title: "Zephryn Research Synthesis",
+                pub: "zephryn.ai",
                 type: "AI Research Engine",
-                url: "https://cohere.com",
-                snippet: "Real-time web research synthesis.",
+                url: "#",
+                snippet: "AI-powered multi-source research synthesis.",
                 keywords: [topic],
               },
             ];
@@ -184,16 +190,21 @@ function ResearchContent() {
       setChatMessages([
         {
           role: "assistant",
-          text: `Research on "${topic}" is complete. I've synthesized information from ${sources.length} web sources. Ask me anything about this topic — I can dig deeper into any aspect.`,
+          text: `Research on "${topic}" is complete. I've synthesized information from ${sources.length} verified sources. Ask me anything to dig deeper into any aspect of this topic.`,
         },
       ]);
 
       setCurrentStep(4);
     } catch (error) {
+      clearTimeout(hardTimeout);
       console.error("Research error:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Research synthesis failed."
-      );
+      const msg =
+        error instanceof Error
+          ? error.name === "AbortError"
+            ? "Research timed out. Please try again."
+            : error.message
+          : "Research synthesis failed. Please try again.";
+      toast.error(msg, { duration: 5000 });
       setCurrentStep(1);
     }
   };
