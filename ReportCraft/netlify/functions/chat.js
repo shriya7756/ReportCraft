@@ -31,7 +31,7 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         message: message,
-        model: "command-r-plus",
+        model: "command-r-plus-08-2024",
         preamble: systemPrompt,
         temperature: 0.3
       }),

@@ -43,7 +43,7 @@ Write with authority, precision, and depth appropriate for a research scientist 
       },
       body: JSON.stringify({
         message: userPrompt,
-        model: "command-r-plus",
+        model: "command-r-plus-08-2024",
         preamble: systemPrompt,
         temperature: 0.2
       }),
