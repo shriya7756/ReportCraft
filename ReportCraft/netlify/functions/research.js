@@ -30,9 +30,9 @@ exports.handler = async (event) => {
 
   if (!apiKey) {
     return {
-      statusCode: 200,
+      statusCode: 500,
       headers: CORS,
-      body: JSON.stringify(buildMockReport(topic)),
+      body: JSON.stringify({ error: "COHERE_API_KEY environment variable is missing. Please add it to your Netlify dashboard." }),
     };
   }
 
@@ -56,8 +56,8 @@ exports.handler = async (event) => {
         messages: [
           {
             role: "system",
-            content: `You are an elite research scientist. Generate a comprehensive research report using ONLY the provided factual context. 
-If the context is insufficient, state what is known and infer logical conclusions based on the context.
+            content: `You are an elite research scientist. Generate a highly concise research report using ONLY the provided factual context. 
+If the context is insufficient, state what is known.
 
 Structure your response with these EXACT section headers on their own lines:
 ABSTRACT:
@@ -65,7 +65,7 @@ METHODOLOGY:
 ANALYSIS:
 CONCLUSION:
 
-Write 2-3 paragraphs per section. Be specific, data-driven, and authoritative.
+CRITICAL: You MUST write exactly 2 concise sentences per section. Do NOT write more than 2 sentences per section to ensure the generation finishes extremely fast.
 
 FACTUAL CONTEXT:
 ${context}`,
@@ -76,7 +76,7 @@ ${context}`,
           },
         ],
         temperature: 0.1, // low temp for factual accuracy
-        max_tokens: 1000,
+        max_tokens: 350,
       }),
     });
 
@@ -86,9 +86,9 @@ ${context}`,
       const errText = await cohereRes.text().catch(() => "");
       console.error("Cohere error:", cohereRes.status, errText);
       return {
-        statusCode: 200,
+        statusCode: 500,
         headers: CORS,
-        body: JSON.stringify(buildMockReport(topic)),
+        body: JSON.stringify({ error: `Cohere API error: ${cohereRes.status} ${errText}` }),
       };
     }
 
@@ -96,7 +96,7 @@ ${context}`,
     const content = data.message?.content?.[0]?.text || data.text || "";
 
     if (!content) {
-      return { statusCode: 200, headers: CORS, body: JSON.stringify(buildMockReport(topic)) };
+      return { statusCode: 500, headers: CORS, body: JSON.stringify({ error: "Cohere returned an empty response." }) };
     }
 
     const abstract    = extractSection(content, "ABSTRACT")    || content.split("\n\n")[0] || "";
@@ -121,9 +121,9 @@ ${context}`,
     clearTimeout(timeout);
     console.error("Research function error:", err);
     return {
-      statusCode: 200,
+      statusCode: 500,
       headers: CORS,
-      body: JSON.stringify(buildMockReport(topic)),
+      body: JSON.stringify({ error: `Server timeout or network error: ${err.message}. The research report generation took longer than the maximum allowed serverless execution time (10 seconds).` }),
     };
   }
 };
@@ -181,24 +181,11 @@ function buildSources(topic) {
     {
       id: 1,
       title: `State of the Field: ${topic}`,
-      pub: "Zephryn Research Engine",
+      pub: "ReportCraft Research Engine",
       type: "AI Synthesis",
       url: "https://cohere.com",
       snippet: `Comprehensive AI-driven synthesis of current research on ${topic}.`,
       keywords: [topic],
     }
   ];
-}
-
-function buildMockReport(topic) {
-  const t = topic;
-  return {
-    report: `ABSTRACT:\nThis report synthesizes current knowledge on ${t} using Zephryn's autonomous multi-source research engine. Our analysis draws from peer-reviewed literature, industry reports, and real-time web sources to deliver a comprehensive intelligence briefing. The field of ${t} has undergone significant transformation in recent years, marked by accelerating innovation cycles and increasing interdisciplinary collaboration. Key findings suggest that ${t} is at an inflection point where foundational research is beginning to yield scalable, real-world applications.\n\nMETHODOLOGY:\nOur research methodology employs a three-stage pipeline. First, a comprehensive literature sweep was conducted across peer-reviewed journals, conference proceedings, and preprint archives. Second, structured expert simulations were run using Zephryn's multi-agent discourse framework to cross-validate findings and identify consensus versus contested claims. Third, real-time web signals and citation networks were aggregated to capture the most current developments. All sources were evaluated for credibility, recency, and methodological rigor before inclusion in this synthesis.\n\nANALYSIS:\nDeep analysis of ${t} reveals three dominant structural themes. First, a 45–60% increase in research output over the past three years signals rapidly growing institutional interest. Second, a clear convergence is occurring between ${t} and adjacent fields, creating novel hybrid frameworks that outperform single-discipline approaches. Third, while theoretical models have matured considerably, practical implementation at scale remains constrained by data quality issues, regulatory uncertainty, and a persistent talent gap. The most impactful work is emerging from cross-sector collaborations where academic rigor meets industry resources. Key unresolved debates center on standardization, reproducibility, and the equitable distribution of benefits.\n\nCONCLUSION:\nIn conclusion, ${t} represents one of the highest-leverage research areas of the current decade. The convergence of improved foundational models, growing datasets, and maturing tooling creates a compelling window for transformative impact. Priority areas for the immediate research agenda include: improving interpretability and transparency, developing standardized evaluation benchmarks, and addressing deployment bottlenecks that prevent lab-to-production transfer. Organizations and researchers who systematically address these gaps will define the next generation of ${t} advances.`,
-    abstract: `This report synthesizes current knowledge on ${t} using Zephryn's autonomous multi-source research engine. Our analysis draws from peer-reviewed literature, industry reports, and real-time web sources. The field of ${t} has undergone significant transformation, marked by accelerating innovation cycles and increasing interdisciplinary collaboration.`,
-    methodology: `Our research methodology employs a three-stage pipeline. First, a comprehensive literature sweep across peer-reviewed journals, conference proceedings, and preprint archives. Second, structured expert simulations using Zephryn's multi-agent discourse framework to cross-validate findings. Third, real-time web signals and citation networks were aggregated.`,
-    analysis: `Deep analysis of ${t} reveals three dominant structural themes: (1) a 45–60% increase in research output over three years signals rapidly growing institutional interest; (2) convergence with adjacent fields creates novel hybrid frameworks that outperform single-discipline approaches; (3) practical implementation remains constrained by data quality issues, regulatory uncertainty, and talent gaps.`,
-    conclusion: `${t} represents one of the highest-leverage research areas of the current decade. Priority areas for the immediate agenda: improving interpretability and transparency, developing standardized evaluation benchmarks, and addressing deployment bottlenecks that prevent lab-to-production transfer.`,
-    sources: buildSources(t),
-    topic: t,
-  };
 }

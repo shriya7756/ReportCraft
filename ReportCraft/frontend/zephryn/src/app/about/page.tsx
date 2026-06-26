@@ -34,7 +34,7 @@ const values = [
     icon: Globe,
     title: "Nexus Access",
     description:
-      "Deep analytical power should not be gated. Zephryn democratizes high-fidelity research for every curious mind on the planet.",
+      "Deep analytical power should not be gated. ReportCraft democratizes high-fidelity research for every curious mind on the planet.",
     color: "text-indigo-400"
   },
   {
@@ -66,13 +66,13 @@ export default function AboutPage() {
         <div className="relative mx-auto max-w-5xl px-8 text-center">
           <FadeInSection>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 text-[10px] font-bold uppercase tracking-[0.4em] text-cyan-400 mb-12">
-              The Genesis of Zephryn
+              The Genesis of ReportCraft
             </div>
             <h1 className="text-6xl sm:text-8xl font-black tracking-tight mb-8">
               Synthesizing <span className="gradient-text">Infinity.</span>
             </h1>
             <p className="mx-auto max-w-3xl text-xl sm:text-2xl leading-relaxed text-[var(--text-secondary)] opacity-60 font-medium">
-              Zephryn is a transcendental research environment. We blend advanced autonomous reasoners with premium design to deliver comprehensive knowledge in a single resonance.
+              ReportCraft is a transcendental research environment. We blend advanced autonomous reasoners with premium design to deliver comprehensive knowledge in a single resonance.
             </p>
           </FadeInSection>
         </div>
@@ -89,7 +89,7 @@ export default function AboutPage() {
                   We believe that the bottleneck of human progress is the speed of synthesis. Modern research is fragmented, buried under layers of noise and accessibility barriers.
                 </p>
                 <p>
-                  Zephryn orchestrates an ensemble of specialized language agents that don't just search—they understand. They debate, cross-examine, and refine information into a cohesive intelligence report.
+                  ReportCraft orchestrates an ensemble of specialized language agents that don't just search—they understand. They debate, cross-examine, and refine information into a cohesive intelligence report.
                 </p>
                 <p>
                   This is built for the high-end analyst, the visionary student, and the tireless researcher who demands depth without the friction of manual cross-referencing.

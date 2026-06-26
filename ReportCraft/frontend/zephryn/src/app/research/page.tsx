@@ -74,7 +74,7 @@ function ResearchContent() {
     setChatMessages([]);
 
     const phases = [
-      { label: "Connecting to Zephryn Knowledge Network...", p: 10 },
+      { label: "Connecting to ReportCraft Knowledge Network...", p: 10 },
       { label: "Scouring scientific databases and web sources...", p: 30 },
       { label: "Cross-referencing literature and citations...", p: 55 },
       { label: "Synthesizing multi-source knowledge graph...", p: 80 },
@@ -158,8 +158,8 @@ function ResearchContent() {
           : [
               {
                 id: 1,
-                title: "Zephryn Research Synthesis",
-                pub: "zephryn.ai",
+                title: "ReportCraft Research Synthesis",
+                pub: "ReportCraft.ai",
                 type: "AI Research Engine",
                 url: "#",
                 snippet: "AI-powered multi-source research synthesis.",
@@ -523,7 +523,7 @@ function ResearchContent() {
                         }`}
                       >
                         <span className="text-[9px] font-bold uppercase block mb-2 opacity-30">
-                          {m.role === "user" ? "Scientist" : "Zephryn AI"}
+                          {m.role === "user" ? "Scientist" : "ReportCraft AI"}
                         </span>
                         <p className="text-sm font-medium leading-relaxed opacity-90">
                           {m.text}

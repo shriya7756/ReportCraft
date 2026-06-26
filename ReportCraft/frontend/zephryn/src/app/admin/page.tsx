@@ -23,7 +23,7 @@ export default function AdminPage() {
     { id: 1, user: "shriya@example.com", action: "Generated Report", target: "Quantum Computing", time: "2 mins ago" },
     { id: 2, user: "john@doe.com", action: "Uploaded Paper", target: "neural_net.pdf", time: "15 mins ago" },
     { id: 3, user: "sarah@tech.io", action: "Asked Question", target: "What is ROI of AI?", time: "1 hour ago" },
-    { id: 4, user: "admin@zephryn.com", action: "Login", target: "System", time: "2 hours ago" },
+    { id: 4, user: "admin@ReportCraft.com", action: "Login", target: "System", time: "2 hours ago" },
   ]);
 
   useEffect(() => {

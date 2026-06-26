@@ -67,7 +67,7 @@ export default function ProfilePage() {
                 <span className="gradient-text">{user.email.split('@')[0]}</span>
               </h1>
               <p className="text-xl font-medium text-[var(--text-secondary)] opacity-60 max-w-2xl leading-relaxed">
-                Authorized for deep synthesis and multidimensional inquiry within the Zephryn nexus since {stats.joinDate}.
+                Authorized for deep synthesis and multidimensional inquiry within the ReportCraft nexus since {stats.joinDate}.
               </p>
            </div>
            

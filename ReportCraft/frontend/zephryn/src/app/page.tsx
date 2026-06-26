@@ -20,7 +20,7 @@ const steps = [
     step: "01",
     title: "Enter Topic",
     description:
-      "Initiate the flow with any research subject. Zephryn instantly begins vectorizing the conceptual landscape.",
+      "Initiate the flow with any research subject. ReportCraft instantly begins vectorizing the conceptual landscape.",
   },
   {
     step: "02",
@@ -39,7 +39,7 @@ const steps = [
 export default function Home() {
   return (
     <div className="bg-[var(--background)] text-[var(--text-primary)] transition-colors duration-500 selection:bg-cyan-500/30">
-      {/* ========== HERO - ETHEREAL ZEPHRYN ========== */}
+      {/* ========== HERO - ETHEREAL ReportCraft ========== */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-20">
         {/* Animated Background Blobs */}
         <div className="absolute top-1/4 -left-20 w-96 h-96 bg-cyan-500/10 blur-[100px] rounded-full animate-pulse" />
@@ -63,7 +63,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              <span className="block mb-2">Zephryn</span>
+              <span className="block mb-2">ReportCraft</span>
               <span className="gradient-text block">Engine.</span>
             </motion.h1>
 
@@ -111,7 +111,7 @@ export default function Home() {
                     Logic.
                   </h2>
                   <p className="text-xl text-[var(--text-secondary)] leading-relaxed">
-                    We&apos;ve transcended traditional search. Zephryn utilizes a 
+                    We&apos;ve transcended traditional search. ReportCraft utilizes a 
                     multi-agent discourse layer that mimics the peer-review 
                     rigor of human academia.
                   </p>
@@ -197,7 +197,7 @@ export default function Home() {
             </p>
             <div className="flex justify-center">
               <Link href="/research" className="btn-zephyr btn-zephyr-primary px-16 py-6 text-2xl shadow-2xl shadow-cyan-500/20">
-                Launch Zephryn
+                Launch ReportCraft
               </Link>
             </div>
           </FadeInSection>

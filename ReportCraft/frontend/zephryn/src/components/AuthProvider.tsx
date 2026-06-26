@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = async (email: string, pass: string) => {
     setIsLoading(true);
     // Mock login logic
-    if (email === "admin@zephryn.com" && pass === "admin123") {
+    if (email === "admin@ReportCraft.com" && pass === "admin123") {
       const adminUser: User = { id: "1", email, role: "admin" };
       setUser(adminUser);
       localStorage.setItem("rc_user", JSON.stringify(adminUser));

@@ -12,7 +12,7 @@ export function Footer() {
         <Logo size={28} />
         
         <p className="text-sm font-medium text-[var(--text-tertiary)] opacity-60">
-          &copy; {new Date().getFullYear()} Zephryn. Ethereal Intelligence for Deeper Inquiry.
+          &copy; {new Date().getFullYear()} ReportCraft. Ethereal Intelligence for Deeper Inquiry.
         </p>
 
         <div className="flex gap-8">

@@ -26,26 +26,26 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Zephryn — Ethereal Intelligence for Deep Synthesis",
+  title: "ReportCraft — Ethereal Intelligence for Deep Synthesis",
   description:
-    "Transcend traditional search. Zephryn orchestrates multi-agent reasoning ensembles to synthesize multi-perspective intelligence reports with high-fidelity precision.",
+    "Transcend traditional search. ReportCraft orchestrates multi-agent reasoning ensembles to synthesize multi-perspective intelligence reports with high-fidelity precision.",
   keywords: [
     "autonomous research",
     "intelligence synthesis",
     "reasoning nexus",
     "multidimensional analysis",
-    "zephryn",
+    "ReportCraft",
   ],
   openGraph: {
-    title: "Zephryn — Ethereal Intelligence for Deep Synthesis",
+    title: "ReportCraft — Ethereal Intelligence for Deep Synthesis",
     description:
       "Orchestrating multi-agent reasoning ensembles for high-fidelity intelligence synthesis.",
     type: "website",
-    siteName: "Zephryn",
+    siteName: "ReportCraft",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Zephryn — Ethereal Intelligence for Deep Synthesis",
+    title: "ReportCraft — Ethereal Intelligence for Deep Synthesis",
     description:
       "Orchestrating multi-agent reasoning ensembles for high-fidelity intelligence synthesis.",
   },

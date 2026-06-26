@@ -1,9 +1,9 @@
 {
-  "name": "zephryn",
+  "name": "reportcraft",
   "version": "1.0.0",
   "private": true,
-  "description": "Zephryn — AI-Powered Research Platform. Transform any topic into comprehensive, well-cited research reports.",
-  "author": "Zephryn Team",
+  "description": "ReportCraft — AI-Powered Research Platform. Transform any topic into comprehensive, well-cited research reports.",
+  "author": "ReportCraft Team",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -15,7 +15,7 @@ export function Logo({ size = 32, className = "" }: { size?: number; className?:
           viewBox="0 0 48 48"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          aria-label="Zephryn intelligence logo"
+          aria-label="ReportCraft intelligence logo"
           role="img"
           className="relative drop-shadow-sm"
         >
@@ -39,7 +39,7 @@ export function Logo({ size = 32, className = "" }: { size?: number; className?:
         className="text-2xl font-black tracking-tighter" 
         style={{ color: "var(--text-primary)", fontFamily: "var(--font-display)" }}
       >
-        Zephryn
+        ReportCraft
       </span>
     </div>
   );

@@ -25,14 +25,14 @@ export async function POST(request: Request) {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${apiKey}`,
-          "X-Client-Name": "zephryn-chat",
+          "X-Client-Name": "ReportCraft-chat",
         },
         body: JSON.stringify({
           model: "command-r-plus-08-2024",
           messages: [
             {
               role: "system",
-              content: `You are Zephryn, an elite AI research scientist with deep expertise. The user has just completed research on the topic: "${topic}". Answer their follow-up questions with scientific precision, providing data-backed insights. Be concise but highly informative. Use clear paragraphs.`,
+              content: `You are ReportCraft, an elite AI research scientist with deep expertise. The user has just completed research on the topic: "${topic}". Answer their follow-up questions with scientific precision, providing data-backed insights. Be concise but highly informative. Use clear paragraphs.`,
             },
             {
               role: "user",

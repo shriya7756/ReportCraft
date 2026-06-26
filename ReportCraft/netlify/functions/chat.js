@@ -31,9 +31,9 @@ exports.handler = async (event) => {
 
   if (!apiKey) {
     return {
-      statusCode: 200,
+      statusCode: 500,
       headers: CORS,
-      body: JSON.stringify({ response: generateFallbackResponse(topic, message) }),
+      body: JSON.stringify({ error: "COHERE_API_KEY environment variable is missing. Please add it to your Netlify dashboard." }),
     };
   }
 
@@ -55,7 +55,7 @@ exports.handler = async (event) => {
         messages: [
           {
             role: "system",
-            content: `You are Zephryn, an elite AI research scientist. 
+            content: `You are ReportCraft, an elite AI research scientist. 
 The user has completed research on "${topic}". Answer follow-up questions with scientific precision. Be concise but highly informative.
 Use the following factual context retrieved for their specific question to ground your answer:
 
@@ -68,25 +68,31 @@ ${context}`,
           },
         ],
         temperature: 0.2,
-        max_tokens: 600,
+        max_tokens: 400,
       }),
     });
 
     clearTimeout(timeout);
 
     if (!cohereRes.ok) {
+      const errText = await cohereRes.text().catch(() => "");
       return {
-        statusCode: 200,
+        statusCode: 500,
         headers: CORS,
-        body: JSON.stringify({ response: generateFallbackResponse(topic, message) }),
+        body: JSON.stringify({ error: `Cohere API error: ${cohereRes.status} ${errText}` }),
       };
     }
 
     const data = await cohereRes.json();
-    const content =
-      data.message?.content?.[0]?.text ||
-      data.text ||
-      generateFallbackResponse(topic, message);
+    const content = data.message?.content?.[0]?.text || data.text || "";
+
+    if (!content) {
+      return {
+        statusCode: 500,
+        headers: CORS,
+        body: JSON.stringify({ error: "Cohere returned an empty response." }),
+      };
+    }
 
     return {
       statusCode: 200,
@@ -97,9 +103,9 @@ ${context}`,
     clearTimeout(timeout);
     console.error("Chat function error:", err);
     return {
-      statusCode: 200,
+      statusCode: 500,
       headers: CORS,
-      body: JSON.stringify({ response: generateFallbackResponse(topic, message) }),
+      body: JSON.stringify({ error: `Server timeout or network error: ${err.message}` }),
     };
   }
 };
@@ -123,18 +129,4 @@ async function fetchWikiContext(query) {
   } catch (err) {
     return { context: "" };
   }
-}
-
-function generateFallbackResponse(topic, message) {
-  const q = message.toLowerCase();
-  if (q.includes("trend") || q.includes("future") || q.includes("direction")) {
-    return `Regarding future trends in ${topic}: The field is rapidly converging with adjacent disciplines, driving a new generation of hybrid approaches. Researchers anticipate major milestones within 2–5 years as foundational models mature into scalable production systems. Key vectors include increased automation, improved interpretability, and wider democratization of access tools.`;
-  }
-  if (q.includes("challenge") || q.includes("problem") || q.includes("issue") || q.includes("limitation")) {
-    return `The primary challenges in ${topic} center on three axes: (1) Scalability — current methods don't generalize well to real-world complexity at production scale; (2) Reproducibility — many published results are difficult to replicate across different experimental settings; (3) Adoption — bridging the gap between research prototypes and enterprise-grade deployments remains a significant bottleneck requiring both technical and organizational solutions.`;
-  }
-  if (q.includes("application") || q.includes("use case") || q.includes("industry") || q.includes("real world")) {
-    return `${topic} has found compelling applications across multiple domains. Healthcare organizations are deploying it to improve diagnostic precision and drug discovery pipelines. Financial institutions leverage it for real-time risk modeling and fraud detection. Meanwhile, education technology companies use it to personalize learning pathways at scale. Each domain brings unique constraints — regulatory, computational, and ethical — that are actively shaping how the technology evolves.`;
-  }
-  return `That's an important question about ${topic}. Current research indicates a nuanced picture where multiple competing hypotheses have strong empirical support. The most rigorous studies suggest that context matters enormously — results that hold in one setting may not transfer directly to others. The emerging consensus recommends a systematic approach: establish clear baselines, test assumptions rigorously, and iterate based on measured outcomes rather than theoretical predictions. Would you like me to focus on a specific aspect of this?`;
 }

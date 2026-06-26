@@ -34,7 +34,7 @@ Write with authority, precision and depth. Each section should be 2-4 substantia
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${apiKey}`,
-          "X-Client-Name": "zephryn-research",
+          "X-Client-Name": "ReportCraft-research",
         },
         body: JSON.stringify({
           model: "command-r-plus-08-2024",
@@ -115,7 +115,7 @@ function buildSources(topic: string) {
     {
       id: 1,
       title: `Comprehensive Overview: ${topic}`,
-      pub: "Zephryn Knowledge Synthesis",
+      pub: "ReportCraft Knowledge Synthesis",
       type: "AI Research Engine",
       url: "https://cohere.com",
       snippet: `In-depth AI-generated research covering key aspects of ${topic}.`,

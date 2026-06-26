@@ -27,19 +27,19 @@ const categories = [
 const faqs: Record<string, { question: string; answer: string }[]> = {
   "getting-started": [
     {
-      question: "What is Zephryn?",
+      question: "What is ReportCraft?",
       answer:
-        "Zephryn is a premium autonomous research nexus. It utilizes advanced reasoning ensembles to synthesize multi-perspective intelligence reports with high-fidelity citations and ethereal readability.",
+        "ReportCraft is a premium autonomous research nexus. It utilizes advanced reasoning ensembles to synthesize multi-perspective intelligence reports with high-fidelity citations and ethereal readability.",
     },
     {
       question: "How do I initiate my first inquiry?",
       answer:
-        "Navigate to the Synthesis console, input your core topic within the neural field, and trigger search. Zephryn will automatically coordinate specialized expert agents to map the knowledge landscape.",
+        "Navigate to the Synthesis console, input your core topic within the neural field, and trigger search. ReportCraft will automatically coordinate specialized expert agents to map the knowledge landscape.",
     },
     {
-      question: "Is Zephryn free to access?",
+      question: "Is ReportCraft free to access?",
       answer:
-        "Zephryn offers an introductory frequency for all seekers. For deeper resonance, higher compute thresholds, and exclusive reasoning models, explore our Pro and Enterprise tiers.",
+        "ReportCraft offers an introductory frequency for all seekers. For deeper resonance, higher compute thresholds, and exclusive reasoning models, explore our Pro and Enterprise tiers.",
     },
     {
       question: "What topics are compatible?",
@@ -51,7 +51,7 @@ const faqs: Record<string, { question: string; answer: string }[]> = {
     {
       question: "How does the multi-perspective engine operate?",
       answer:
-        "Zephryn identifies high-value expert personas relevant to your inquire. It then facilitates a collaborative discourse between these agents, cross-verifying data and surfacing hidden insights.",
+        "ReportCraft identifies high-value expert personas relevant to your inquire. It then facilitates a collaborative discourse between these agents, cross-verifying data and surfacing hidden insights.",
     },
     {
       question: "What data sources are indexed?",
@@ -73,7 +73,7 @@ const faqs: Record<string, { question: string; answer: string }[]> = {
     {
       question: "Are citations verifiable?",
       answer:
-        "Every claim in a Zephryn report is anchored to a verified source. You can click any citation marker to view the origin URI and the supporting data segment.",
+        "Every claim in a ReportCraft report is anchored to a verified source. You can click any citation marker to view the origin URI and the supporting data segment.",
     },
   ],
   account: [
