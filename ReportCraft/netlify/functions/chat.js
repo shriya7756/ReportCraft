@@ -33,7 +33,6 @@ exports.handler = async (event) => {
         message: message,
         model: "command-r-plus",
         preamble: systemPrompt,
-        connectors: [{"id": "web-search"}],
         temperature: 0.3
       }),
     });
