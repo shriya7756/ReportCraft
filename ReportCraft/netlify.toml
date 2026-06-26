@@ -1,14 +1,13 @@
 [build]
-  command = "cd frontend/zephryn && npm i && npm run build"
-  publish = "frontend/zephryn/out"
+  base = "frontend/zephryn"
+  command = "npm install && npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 [functions]
   directory = "netlify/functions"
-
-[[redirects]]
-  from = "/api/research"
-  to = "/.netlify/functions/research"
-  status = 200
 
 [[redirects]]
   from = "/api/chat"
