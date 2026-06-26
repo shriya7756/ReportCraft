@@ -38,7 +38,7 @@ exports.handler = async (event) => {
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
+  const timeout = setTimeout(() => controller.abort(), 9500);
 
   try {
     const { context } = await fetchWikiContext(message + " " + topic);
@@ -51,7 +51,7 @@ exports.handler = async (event) => {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "command-r-plus-08-2024",
+        model: "command-r-08-2024",
         messages: [
           {
             role: "system",
@@ -106,21 +106,17 @@ ${context}`,
 
 async function fetchWikiContext(query) {
   try {
-    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json&srlimit=2`;
-    const searchRes = await fetch(searchUrl);
-    const searchData = await searchRes.json();
+    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=2&prop=extracts&exintro=true&explaintext=true&format=json`;
+    const res = await fetch(searchUrl);
+    const data = await res.json();
     
-    if (!searchData.query || !searchData.query.search || searchData.query.search.length === 0) {
+    if (!data.query || !data.query.pages) {
       return { context: "No direct information found." };
     }
 
-    const pageIds = searchData.query.search.map(s => s.pageid).join('|');
-    const extractUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&pageids=${pageIds}&exintro=true&explaintext=true&format=json`;
-    const extractRes = await fetch(extractUrl);
-    const extractData = await extractRes.json();
-
     let context = "";
-    for (const [pageId, page] of Object.entries(extractData.query.pages)) {
+    for (const [pageId, page] of Object.entries(data.query.pages)) {
+      if (!page.extract) continue;
       context += `[Article: ${page.title}]\n${page.extract}\n\n`;
     }
     return { context };

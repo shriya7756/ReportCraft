@@ -37,7 +37,7 @@ exports.handler = async (event) => {
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
+  const timeout = setTimeout(() => controller.abort(), 9500);
 
   try {
     // 1. Fetch factual context from Wikipedia
@@ -52,7 +52,7 @@ exports.handler = async (event) => {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "command-r-plus-08-2024",
+        model: "command-r-08-2024",
         messages: [
           {
             role: "system",
@@ -76,7 +76,7 @@ ${context}`,
           },
         ],
         temperature: 0.1, // low temp for factual accuracy
-        max_tokens: 1800,
+        max_tokens: 1000,
       }),
     });
 
@@ -132,27 +132,20 @@ ${context}`,
 
 async function fetchWikiContext(topic) {
   try {
-    // 1. Search for top 3 matching pages
-    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(topic)}&utf8=&format=json&srlimit=3`;
-    const searchRes = await fetch(searchUrl);
-    const searchData = await searchRes.json();
+    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(topic)}&gsrlimit=3&prop=extracts&exintro=true&explaintext=true&format=json`;
+    const res = await fetch(searchUrl);
+    const data = await res.json();
     
-    if (!searchData.query || !searchData.query.search || searchData.query.search.length === 0) {
+    if (!data.query || !data.query.pages) {
       return { context: "No direct information found. Extrapolate based on general scientific principles.", sources: [] };
     }
-
-    const pageIds = searchData.query.search.map(s => s.pageid).join('|');
-
-    // 2. Fetch extracts for those pages
-    const extractUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&pageids=${pageIds}&exintro=true&explaintext=true&format=json`;
-    const extractRes = await fetch(extractUrl);
-    const extractData = await extractRes.json();
 
     let context = "";
     let sources = [];
     let id = 1;
 
-    for (const [pageId, page] of Object.entries(extractData.query.pages)) {
+    for (const [pageId, page] of Object.entries(data.query.pages)) {
+      if (!page.extract) continue;
       context += `[Article: ${page.title}]\n${page.extract}\n\n`;
       sources.push({
         id: id++,
