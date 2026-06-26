@@ -41,6 +41,8 @@ exports.handler = async (event) => {
   const timeout = setTimeout(() => controller.abort(), 8000);
 
   try {
+    const { context } = await fetchWikiContext(message + " " + topic);
+
     const cohereRes = await fetch("https://api.cohere.com/v2/chat", {
       method: "POST",
       signal: controller.signal,
@@ -53,14 +55,19 @@ exports.handler = async (event) => {
         messages: [
           {
             role: "system",
-            content: `You are Zephryn, an elite AI research scientist. The user has completed research on "${topic}". Answer follow-up questions with scientific precision. Be concise but highly informative.`,
+            content: `You are Zephryn, an elite AI research scientist. 
+The user has completed research on "${topic}". Answer follow-up questions with scientific precision. Be concise but highly informative.
+Use the following factual context retrieved for their specific question to ground your answer:
+
+FACTUAL CONTEXT:
+${context}`,
           },
           {
             role: "user",
             content: message,
           },
         ],
-        temperature: 0.3,
+        temperature: 0.2,
         max_tokens: 600,
       }),
     });
@@ -97,6 +104,31 @@ exports.handler = async (event) => {
   }
 };
 
+async function fetchWikiContext(query) {
+  try {
+    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json&srlimit=2`;
+    const searchRes = await fetch(searchUrl);
+    const searchData = await searchRes.json();
+    
+    if (!searchData.query || !searchData.query.search || searchData.query.search.length === 0) {
+      return { context: "No direct information found." };
+    }
+
+    const pageIds = searchData.query.search.map(s => s.pageid).join('|');
+    const extractUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&pageids=${pageIds}&exintro=true&explaintext=true&format=json`;
+    const extractRes = await fetch(extractUrl);
+    const extractData = await extractRes.json();
+
+    let context = "";
+    for (const [pageId, page] of Object.entries(extractData.query.pages)) {
+      context += `[Article: ${page.title}]\n${page.extract}\n\n`;
+    }
+    return { context };
+  } catch (err) {
+    return { context: "" };
+  }
+}
+
 function generateFallbackResponse(topic, message) {
   const q = message.toLowerCase();
   if (q.includes("trend") || q.includes("future") || q.includes("direction")) {
@@ -107,9 +139,6 @@ function generateFallbackResponse(topic, message) {
   }
   if (q.includes("application") || q.includes("use case") || q.includes("industry") || q.includes("real world")) {
     return `${topic} has found compelling applications across multiple domains. Healthcare organizations are deploying it to improve diagnostic precision and drug discovery pipelines. Financial institutions leverage it for real-time risk modeling and fraud detection. Meanwhile, education technology companies use it to personalize learning pathways at scale. Each domain brings unique constraints — regulatory, computational, and ethical — that are actively shaping how the technology evolves.`;
-  }
-  if (q.includes("how") || q.includes("explain") || q.includes("what")) {
-    return `${topic} operates at the intersection of multiple theoretical frameworks. At its core, it leverages advances in data representation, computational efficiency, and algorithmic design to solve problems that were previously intractable. The key insight is that by combining insights from different research traditions, practitioners can achieve results that far exceed what any single approach could deliver. The most successful implementations share three traits: rigorous empirical validation, domain-specific adaptation, and robust feedback loops for continuous improvement.`;
   }
   return `That's an important question about ${topic}. Current research indicates a nuanced picture where multiple competing hypotheses have strong empirical support. The most rigorous studies suggest that context matters enormously — results that hold in one setting may not transfer directly to others. The emerging consensus recommends a systematic approach: establish clear baselines, test assumptions rigorously, and iterate based on measured outcomes rather than theoretical predictions. Would you like me to focus on a specific aspect of this?`;
 }
