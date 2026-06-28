@@ -13,9 +13,146 @@ ReportCraft is an LLM-powered system that generates comprehensive, Wikipedia-sty
 
 - **Intelligent Research**: Automatically discovers diverse perspectives and conducts multi-angle research
 - **Multi-Perspective Analysis**: Simulates expert conversations to uncover deeper insights
-- **Structured Reports**: Well-organized, article-style reports with hierarchical outlines
-- **Verifiable Citations**: Every claim backed by traceable sources with inline citations
-- **Web-Scale Sources**: Integrates with multiple search engines and retrieval systems
+- **Structured Reports**: Well-organized reports with Abstract, Methodology, Analysis and Conclusion sections
+- **Verifiable Citations**: Every claim backed by traceable Wikipedia sources
+- **AI Chat**: Follow-up question assistant grounded in the same research context
+
+## Installation
+
+### Python Package
+
+```bash
+pip install knowledge-reportcraft
+```
+
+### From Source
+
+1. Clone the repository
+   ```bash
+   git clone <repository-url>
+   cd ReportCraft
+   ```
+
+2. Install required packages
+   ```bash
+   conda create -n reportcraft python=3.11
+   conda activate reportcraft
+   pip install -r requirements.txt
+   ```
+
+## Quick Start
+
+### Using the ReportCraft Engine
+
+```python
+from knowledge_reportcraft import ReportCraftWikiRunnerArguments, ReportCraftWikiRunner, ReportCraftWikiLMConfigs
+from knowledge_reportcraft.lm import LitellmModel
+from knowledge_reportcraft.rm import YouRM
+
+# Configure language models
+lm_configs = ReportCraftWikiLMConfigs()
+openai_kwargs = {
+    'api_key': os.getenv("OPENAI_API_KEY"),
+    'temperature': 1.0,
+    'top_p': 0.9,
+}
+
+gpt_4 = LitellmModel(model='gpt-4o', max_tokens=3000, **openai_kwargs)
+lm_configs.set_article_gen_lm(gpt_4)
+
+# Configure search
+engine_args = ReportCraftWikiRunnerArguments(output_dir='./output')
+rm = YouRM(ydc_api_key=os.getenv('YDC_API_KEY'), k=engine_args.search_top_k)
+
+# Run research
+runner = ReportCraftWikiRunner(engine_args, lm_configs, rm)
+runner.run(topic="Your Research Topic", do_research=True, do_generate_article=True)
+```
+
+## Frontend
+
+### Next.js Application (Zephryn)
+
+The primary web interface is the Zephryn Next.js app, deployed on Netlify.
+
+```bash
+cd frontend/zephryn
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to access the application.
+
+### Streamlit Demo
+
+A lightweight demo interface is also available via Streamlit:
+
+```bash
+cd frontend/demo_light
+pip install -r requirements.txt
+streamlit run reportcraft.py
+```
+
+## Netlify Serverless Functions
+
+The `/api/research` and `/api/chat` endpoints are handled by Netlify Functions located in `netlify/functions/`:
+
+| Endpoint | Function | Description |
+|---|---|---|
+| `POST /api/research` | `research.js` | Generates a structured research report using Wikipedia context and Cohere AI |
+| `POST /api/chat` | `chat.js` | Answers follow-up questions grounded in Wikipedia context |
+
+Both functions use `command-r7b-12-2024` (Cohere) for fast responses within the 10-second serverless limit.
+
+## Deployment
+
+```bash
+# Deploy to Netlify
+netlify deploy --prod
+```
+
+Set the following environment variable in the Netlify dashboard:
+
+- `COHERE_API_KEY` — your Cohere API key
+
+## API & Integrations
+
+- **Language Models**: All models supported by LiteLLM
+- **Search Engines**: YouRM, BingSearch, SerperRM, BraveRM, GoogleSearch, and more
+- **Embedding Models**: All embedding models supported by LiteLLM
+- **Document Grounding**: VectorRM for user-provided document collections
+
+## Project Structure
+
+```
+ReportCraft/
+├── frontend/
+│   ├── zephryn/             # Next.js web application (primary)
+│   └── demo_light/          # Streamlit demo interface
+├── netlify/
+│   └── functions/           # Serverless API endpoints
+│       ├── research.js      # Report generation endpoint
+│       └── chat.js          # AI chat follow-up endpoint
+├── knowledge_reportcraft/   # Core research engine
+│   ├── reportcraft_wiki/    # Wiki-style report generation
+│   └── collaborative_reportcraft/ # Collaborative research features
+├── examples/                # Example scripts
+├── netlify.toml             # Netlify build and routing config
+└── requirements.txt
+```
+
+## Configuration
+
+Create a `secrets.toml` file with your API keys:
+
+```toml
+OPENAI_API_KEY = "your_openai_api_key"
+OPENAI_API_TYPE = "openai"
+YDC_API_KEY = "your_you_api_key"  # for You.com search
+BING_SEARCH_API_KEY = "your_bing_key"  # for Bing search
+```
+
+
 
 ## Installation
 
