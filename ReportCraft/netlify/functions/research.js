@@ -98,20 +98,25 @@ ${context}`,
       return { statusCode: 500, headers: CORS, body: JSON.stringify({ error: "Cohere returned an empty response." }) };
     }
 
-    const abstract    = extractSection(content, "ABSTRACT")    || content.split("\n\n")[0] || "";
-    const methodology = extractSection(content, "METHODOLOGY") || content.split("\n\n")[1] || "";
-    const analysis    = extractSection(content, "ANALYSIS")    || content.split("\n\n")[2] || "";
-    const conclusion  = extractSection(content, "CONCLUSION")  || content.split("\n\n").slice(-1)[0] || "";
+    // Normalize inline section headers (e.g. "## METHODOLOGY:") to newline-separated
+    const normalized = content
+      .replace(/##\s*(ABSTRACT|METHODOLOGY|ANALYSIS|CONCLUSION)\s*:/gi, "\n$1:\n")
+      .replace(/\*{1,2}(ABSTRACT|METHODOLOGY|ANALYSIS|CONCLUSION)\*{0,2}\s*:/gi, "\n$1:\n");
+
+    const abstract    = extractSection(normalized, "ABSTRACT")    || `Comprehensive analysis of ${topic}.`;
+    const methodology = extractSection(normalized, "METHODOLOGY") || "Multi-source research methodology applied.";
+    const analysis    = extractSection(normalized, "ANALYSIS")    || "Deep analysis across key dimensions.";
+    const conclusion  = extractSection(normalized, "CONCLUSION")  || "Key findings synthesized.";
 
     return {
       statusCode: 200,
       headers: CORS,
       body: JSON.stringify({
-        report: content,
-        abstract:    abstract    || `Comprehensive analysis of ${topic}.`,
-        methodology: methodology || "Multi-source research methodology applied.",
-        analysis:    analysis    || "Deep analysis across key dimensions.",
-        conclusion:  conclusion  || "Key findings synthesized.",
+        report: normalized,
+        abstract,
+        methodology,
+        analysis,
+        conclusion,
         sources: sources.length > 0 ? sources : buildSources(topic),
         topic,
       }),
@@ -167,8 +172,10 @@ async function fetchWikiContext(topic) {
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 function extractSection(text, sectionName) {
+  // Handles headers with or without a following newline, and stops at the next section or end
+  const allSections = "ABSTRACT|METHODOLOGY|ANALYSIS|CONCLUSION";
   const regex = new RegExp(
-    `${sectionName}[:\\s]*\\n([\\s\\S]*?)(?=\\n(?:ABSTRACT|METHODOLOGY|ANALYSIS|CONCLUSION)[:\\s]*\\n|$)`,
+    `${sectionName}\\s*:\\s*\\n?([\\s\\S]*?)(?=\\n\\s*(?:${allSections})\\s*:|$)`,
     "i"
   );
   const match = text.match(regex);
