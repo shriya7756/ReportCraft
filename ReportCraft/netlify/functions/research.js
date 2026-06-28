@@ -37,10 +37,10 @@ exports.handler = async (event) => {
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 9500);
+  const timeout = setTimeout(() => controller.abort(), 9000);
 
   try {
-    // 1. Fetch factual context from Wikipedia
+    // 1. Fetch factual context from Wikipedia (fast, capped)
     const { context, sources } = await fetchWikiContext(topic);
 
     // 2. Query Cohere with grounded context
@@ -52,31 +52,30 @@ exports.handler = async (event) => {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "command-r-08-2024",
+        model: "command-r7b-12-2024",
         messages: [
           {
             role: "system",
-            content: `You are an elite research scientist. Generate a highly concise research report using ONLY the provided factual context. 
-If the context is insufficient, state what is known.
+            content: `You are a research scientist. Write a brief research report using ONLY the context below.
 
-Structure your response with these EXACT section headers on their own lines:
+Use these EXACT headers on their own lines:
 ABSTRACT:
 METHODOLOGY:
 ANALYSIS:
 CONCLUSION:
 
-CRITICAL: You MUST write exactly 2 concise sentences per section. Do NOT write more than 2 sentences per section to ensure the generation finishes extremely fast.
+Write exactly 2 sentences per section. Be concise.
 
-FACTUAL CONTEXT:
+CONTEXT:
 ${context}`,
           },
           {
             role: "user",
-            content: `Generate a full research report on: "${topic}"`,
+            content: `Research report on: "${topic}"`,
           },
         ],
-        temperature: 0.1, // low temp for factual accuracy
-        max_tokens: 350,
+        temperature: 0.1,
+        max_tokens: 300,
       }),
     });
 
@@ -132,7 +131,7 @@ ${context}`,
 
 async function fetchWikiContext(topic) {
   try {
-    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(topic)}&gsrlimit=3&prop=extracts&exintro=true&explaintext=true&format=json`;
+    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(topic)}&gsrlimit=2&prop=extracts&exintro=true&explaintext=true&exchars=800&format=json`;
     const res = await fetch(searchUrl);
     const data = await res.json();
     
@@ -158,7 +157,7 @@ async function fetchWikiContext(topic) {
       });
     }
 
-    return { context, sources };
+    return { context: context.substring(0, 1500), sources };
   } catch (err) {
     console.error("Wikipedia fetch error:", err);
     return { context: "Rely on standard baseline knowledge.", sources: [] };
