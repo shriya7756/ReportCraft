@@ -38,7 +38,7 @@ exports.handler = async (event) => {
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 9500);
+  const timeout = setTimeout(() => controller.abort(), 9000);
 
   try {
     const { context } = await fetchWikiContext(message + " " + topic);
@@ -51,7 +51,7 @@ exports.handler = async (event) => {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "command-r-08-2024",
+        model: "command-r7b-12-2024",
         messages: [
           {
             role: "system",
@@ -68,7 +68,7 @@ ${context}`,
           },
         ],
         temperature: 0.2,
-        max_tokens: 400,
+        max_tokens: 300,
       }),
     });
 
