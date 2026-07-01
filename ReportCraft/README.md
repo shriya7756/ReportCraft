@@ -92,3 +92,81 @@ runner.run(
 ```
 
 The generated report will be saved to `./output/` in both Markdown and HTML formats.
+
+---
+
+## 🖥️ Frontend
+
+### Zephryn — Next.js Web Application (Primary)
+
+The main web interface is **Zephryn**, a Next.js 15 app with React and Tailwind CSS, deployed on Netlify.
+
+```bash
+cd frontend/zephryn
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to access the app.
+
+**Pages:**
+- `/` — Home / topic input
+- `/dashboard` — Research dashboard
+- `/research` — Active research view
+- `/report` — Generated report viewer with citations
+- `/about` — About the platform
+- `/settings` — API and model settings
+
+### Demo Light — Streamlit Interface
+
+A quick, lightweight demo with minimal setup:
+
+```bash
+cd frontend/demo_light
+pip install -r requirements.txt
+streamlit run reportcraft.py
+```
+
+---
+
+## 🌐 API Reference
+
+The `/api/research` and `/api/chat` endpoints are powered by Netlify Functions in `netlify/functions/`.
+
+### `POST /api/research`
+
+Generates a structured research report grounded in Wikipedia context.
+
+**Request body:**
+```json
+{ "topic": "String — the research subject" }
+```
+
+**Response:**
+```json
+{
+  "report": "Full report text",
+  "abstract": "...",
+  "methodology": "...",
+  "analysis": "...",
+  "conclusion": "...",
+  "sources": [{ "id": 1, "title": "...", "pub": "Wikipedia", "url": "..." }],
+  "topic": "Your topic"
+}
+```
+
+### `POST /api/chat`
+
+Answers follow-up questions grounded in the same Wikipedia context used for the report.
+
+**Request body:**
+```json
+{ "question": "String", "topic": "String" }
+```
+
+**Response:**
+```json
+{ "answer": "String" }
+```
+
+Both functions use **Cohere `command-r7b-12-2024`** for fast responses within the 10-second serverless limit.
