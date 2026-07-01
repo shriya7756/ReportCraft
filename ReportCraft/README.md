@@ -236,3 +236,67 @@ QDRANT_URL     = "https://..."
 ### Supported Language Models
 
 Any model supported by [LiteLLM](https://github.com/BerriAI/litellm) can be used — including OpenAI, Anthropic, Google Gemini, Mistral, and local models via Ollama.
+
+---
+
+## 🚢 Deployment
+
+### Netlify (Recommended)
+
+1. **Connect the repo** to [Netlify](https://netlify.com) via the dashboard.
+2. Netlify will auto-detect `netlify.toml` — no manual build settings needed.
+3. **Add the environment variable** in **Site Settings → Environment Variables**:
+   - `COHERE_API_KEY` — your [Cohere](https://cohere.com) API key
+4. **Deploy:**
+   ```bash
+   netlify deploy --prod
+   ```
+
+The build command (`cd frontend/zephryn && npm install && npm run build`) and publish directory (`frontend/zephryn/out`) are configured in `netlify.toml`.
+
+### Environment Variables Summary
+
+| Variable | Required | Description |
+|---|---|---|
+| `COHERE_API_KEY` | ✅ Yes | Powers `/api/research` and `/api/chat` functions |
+| `OPENAI_API_KEY` | Optional | Used by the Python engine (local runs only) |
+| `YDC_API_KEY` | Optional | You.com search for the Python engine |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 15, React, Tailwind CSS |
+| **Serverless API** | Netlify Functions (Node.js) |
+| **Research Engine** | Python 3.11, DSPy, LiteLLM |
+| **AI Models** | Cohere `command-r7b`, OpenAI GPT-4o, and more |
+| **Search / Retrieval** | Wikipedia API, YouRM, BingSearch, VectorRM (Qdrant) |
+| **Embeddings** | Sentence Transformers, LiteLLM embedding models |
+| **Demo UI** | Streamlit |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how to get started:
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/my-feature`
+3. **Commit** your changes with clear messages: `git commit -m "feat: add my feature"`
+4. **Push** to your fork: `git push origin feature/my-feature`
+5. **Open** a Pull Request against `main`
+
+Please make sure your code passes any existing tests and follows the existing style conventions. For larger changes, open an issue first to discuss the approach.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. See the [LICENSE](./LICENSE) file for details.
+
+---
+
+<p align="center">Built with ❤️ using Cohere AI, Wikipedia, and Next.js</p>
+
