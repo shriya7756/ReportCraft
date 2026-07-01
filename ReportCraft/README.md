@@ -170,3 +170,69 @@ Answers follow-up questions grounded in the same Wikipedia context used for the 
 ```
 
 Both functions use **Cohere `command-r7b-12-2024`** for fast responses within the 10-second serverless limit.
+
+---
+
+## 📁 Project Structure
+
+```
+ReportCraft/
+├── frontend/
+│   ├── zephryn/                  # Next.js 15 web app (primary UI)
+│   │   ├── app/                  # App Router pages
+│   │   ├── components/           # Reusable React components
+│   │   └── public/               # Static assets
+│   ├── reportcraft/              # Alternative Next.js frontend
+│   └── demo_light/               # Streamlit lightweight demo
+├── netlify/
+│   └── functions/
+│       ├── research.js           # POST /api/research — report generation
+│       └── chat.js               # POST /api/chat — follow-up Q&A
+├── knowledge_reportcraft/        # Core Python research engine
+│   ├── reportcraft_wiki/         # Wiki-style multi-perspective pipeline
+│   └── collaborative_reportcraft/# Collaborative research features
+├── examples/                     # Example scripts and notebooks
+├── assets/                       # Brand and UI assets
+├── netlify.toml                  # Netlify build and redirect config
+├── requirements.txt              # Python dependencies
+└── setup.py                      # Package setup
+```
+
+---
+
+## ⚙️ Configuration
+
+### API Keys — `secrets.toml`
+
+Create a `secrets.toml` file at the root of the project with your API keys:
+
+```toml
+# Language model provider
+OPENAI_API_KEY   = "sk-..."
+OPENAI_API_TYPE  = "openai"
+
+# Search retrieval
+YDC_API_KEY          = "..."   # You.com search
+BING_SEARCH_API_KEY  = "..."   # Bing search (optional)
+SERPER_API_KEY       = "..."   # Serper.dev (optional)
+
+# Vector database (optional, for VectorRM)
+QDRANT_API_KEY = "..."
+QDRANT_URL     = "https://..."
+```
+
+> **Never commit `secrets.toml` to version control.** It is listed in `.gitignore`.
+
+### Supported Search Engines
+
+| Class | Provider | Notes |
+|---|---|---|
+| `YouRM` | You.com | Default; recommended for broad coverage |
+| `BingSearch` | Microsoft Bing | Requires Azure subscription |
+| `SerperRM` | Serper.dev | Google Search via Serper |
+| `BraveRM` | Brave Search | Privacy-focused alternative |
+| `VectorRM` | Local Qdrant DB | Use with your own document collection |
+
+### Supported Language Models
+
+Any model supported by [LiteLLM](https://github.com/BerriAI/litellm) can be used — including OpenAI, Anthropic, Google Gemini, Mistral, and local models via Ollama.
