@@ -10,6 +10,15 @@
 
 > Transform any topic into a comprehensive, well-cited research report powered by advanced AI.
 
+## 📸 Demo
+
+![ReportCraft Demo GIF](https://via.placeholder.com/800x400.png?text=ReportCraft+Demo+GIF+Placeholder)
+*(Placeholder: Add a GIF of your application in action here)*
+
+## 🤔 Why I Built This
+
+I built ReportCraft to solve the problem of information overload during research. While most AI assistants provide shallow answers or hallucinate facts, I wanted a tool that could autonomously research multiple perspectives, verify claims against reliable sources (like Wikipedia), and synthesize the findings into a structured, credible report. This project allowed me to dive deep into Retrieval-Augmented Generation (RAG) architecture and orchestrate complex LLM pipelines.
+
 ReportCraft is an LLM-powered research platform that generates structured, Wikipedia-style articles from internet research. It combines a multi-perspective research engine with a modern web interface and serverless API to deliver fast, grounded reports on any subject.
 
 ## ✨ Key Features
