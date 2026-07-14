@@ -1,7 +1,7 @@
 [build]
   base = "ReportCraft"
-  command = "cd frontend/zephryn && npm install && npm run build"
-  publish = "frontend/zephryn/out"
+  command = "cd frontend/reportcraft && npm install && npm run build"
+  publish = "frontend/reportcraft/out"
 
 [functions]
   directory = "netlify/functions"
