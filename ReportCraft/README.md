@@ -12,8 +12,7 @@
 
 ## 📸 Demo
 
-![ReportCraft Demo GIF](https://via.placeholder.com/800x400.png?text=ReportCraft+Demo+GIF+Placeholder)
-*(Placeholder: Add a GIF of your application in action here)*
+![ReportCraft Demo GIF](assets/demo.png)
 
 ## 🤔 Why I Built This
 
