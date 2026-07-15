@@ -10,14 +10,6 @@
 
 > Transform any topic into a comprehensive, well-cited research report powered by advanced AI.
 
-## 📸 Demo
-
-![ReportCraft Demo GIF](assets/demo.png)
-
-## 🤔 Why I Built This
-
-I built ReportCraft to solve the problem of information overload during research. While most AI assistants provide shallow answers or hallucinate facts, I wanted a tool that could autonomously research multiple perspectives, verify claims against reliable sources (like Wikipedia), and synthesize the findings into a structured, credible report. This project allowed me to dive deep into Retrieval-Augmented Generation (RAG) architecture and orchestrate complex LLM pipelines.
-
 ReportCraft is an LLM-powered research platform that generates structured, Wikipedia-style articles from internet research. It combines a multi-perspective research engine with a modern web interface and serverless API to deliver fast, grounded reports on any subject.
 
 ## ✨ Key Features
@@ -105,12 +97,12 @@ The generated report will be saved to `./output/` in both Markdown and HTML form
 
 ## 🖥️ Frontend
 
-### ReportCraft — Next.js Web Application (Primary)
+### Zephryn — Next.js Web Application (Primary)
 
-The main web interface is **ReportCraft**, a Next.js 15 app with React and Tailwind CSS, deployed on Netlify.
+The main web interface is **Zephryn**, a Next.js 15 app with React and Tailwind CSS, deployed on Netlify.
 
 ```bash
-cd frontend/reportcraft
+cd frontend/zephryn
 npm install
 npm run dev
 ```
@@ -186,7 +178,7 @@ Both functions use **Cohere `command-r7b-12-2024`** for fast responses within th
 ```
 ReportCraft/
 ├── frontend/
-│   ├── reportcraft/                  # Next.js 15 web app (primary UI)
+│   ├── zephryn/                  # Next.js 15 web app (primary UI)
 │   │   ├── app/                  # App Router pages
 │   │   ├── components/           # Reusable React components
 │   │   └── public/               # Static assets
@@ -260,7 +252,7 @@ Any model supported by [LiteLLM](https://github.com/BerriAI/litellm) can be used
    netlify deploy --prod
    ```
 
-The build command (`cd frontend/reportcraft && npm install && npm run build`) and publish directory (`frontend/reportcraft/out`) are configured in `netlify.toml`.
+The build command (`cd frontend/zephryn && npm install && npm run build`) and publish directory (`frontend/zephryn/out`) are configured in `netlify.toml`.
 
 ### Environment Variables Summary
 
