@@ -1,7 +1,6 @@
 [build]
-  base = "ReportCraft"
-  command = "cd frontend/zephryn && npm install && npm run build"
-  publish = "frontend/zephryn/out"
+  command = "cd frontend/reportcraft && npm install && npm run build"
+  publish = "frontend/reportcraft/out"
 
 [functions]
   directory = "netlify/functions"
@@ -10,13 +9,11 @@
   from = "/api/research"
   to = "/.netlify/functions/research"
   status = 200
-  force = true
 
 [[redirects]]
   from = "/api/chat"
   to = "/.netlify/functions/chat"
   status = 200
-  force = true
 
 [[redirects]]
   from = "/*"
