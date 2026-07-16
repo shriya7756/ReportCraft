@@ -44,13 +44,13 @@
   --rc-duration: 150ms;
 
   /* Type Scale */
-  --fs-xs:   13px;
-  --fs-sm:   14px;
-  --fs-md:   16px;
-  --fs-lg:   20px;
-  --fs-xl:   28px;
-  --fs-2xl:  40px;
-  --fs-3xl:  56px;
+  --fs-xs:   6.5px;
+  --fs-sm:   7px;
+  --fs-md:   8px;
+  --fs-lg:   10px;
+  --fs-xl:   14px;
+  --fs-2xl:  20px;
+  --fs-3xl:  28px;
 
   /* Light Theme Defaults */
   --background: #FFFFFF;
@@ -113,6 +113,7 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 50%;
 }
 
 body {
