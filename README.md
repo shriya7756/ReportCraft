@@ -97,12 +97,12 @@ The generated report will be saved to `./output/` in both Markdown and HTML form
 
 ## 🖥️ Frontend
 
-### Zephryn — Next.js Web Application (Primary)
+### reportcraft — Next.js Web Application (Primary)
 
-The main web interface is **Zephryn**, a Next.js 15 app with React and Tailwind CSS, deployed on Netlify.
+The main web interface is **reportcraft**, a Next.js 15 app with React and Tailwind CSS, deployed on Netlify.
 
 ```bash
-cd frontend/zephryn
+cd frontend/reportcraft
 npm install
 npm run dev
 ```
@@ -178,7 +178,7 @@ Both functions use **Cohere `command-r7b-12-2024`** for fast responses within th
 ```
 ReportCraft/
 ├── frontend/
-│   ├── zephryn/                  # Next.js 15 web app (primary UI)
+│   ├── reportcraft/                  # Next.js 15 web app (primary UI)
 │   │   ├── app/                  # App Router pages
 │   │   ├── components/           # Reusable React components
 │   │   └── public/               # Static assets
@@ -252,7 +252,7 @@ Any model supported by [LiteLLM](https://github.com/BerriAI/litellm) can be used
    netlify deploy --prod
    ```
 
-The build command (`cd frontend/zephryn && npm install && npm run build`) and publish directory (`frontend/zephryn/out`) are configured in `netlify.toml`.
+The build command (`cd frontend/reportcraft && npm install && npm run build`) and publish directory (`frontend/reportcraft/out`) are configured in `netlify.toml`.
 
 ### Environment Variables Summary
 
