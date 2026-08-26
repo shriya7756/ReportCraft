@@ -9,12 +9,10 @@ import {
   Zap,
   Shield,
   Compass,
-  LifeBuoy
+  LifeBuoy,
+  Github,
 } from "lucide-react";
-import Link from "next/link";
-import {
-  FadeInSection,
-} from "@/components/UIComponents";
+import { FadeInSection } from "@/components/UIComponents";
 
 const categories = [
   { id: "getting-started", label: "Getting started", icon: Zap },
@@ -39,7 +37,7 @@ const faqs: Record<string, { question: string; answer: string }[]> = {
     {
       question: "Is ReportCraft free?",
       answer:
-        "Yes, you can run reports without signing up. Creating an account lets you save your report history to your Dashboard.",
+        "Yes. You can run reports without signing up. Creating an account lets you save your report history to your Dashboard and export reports as .docx files.",
     },
     {
       question: "What topics work best?",
@@ -68,19 +66,29 @@ const faqs: Record<string, { question: string; answer: string }[]> = {
     {
       question: "Can I export my report?",
       answer:
-        "Export is on the roadmap. For now, you can copy the report text or use your browser's print-to-PDF feature to save it.",
+        "Yes. Every completed report has a Download (.docx) button that exports the full report as a Microsoft Word document. You can also find this option in your Dashboard.",
     },
     {
       question: "Are the citations real?",
       answer:
-        "Yes. Each source card in the Sources section links to the original Wikipedia article or web page. Click the external link icon to verify any source.",
+        "Yes. Each source card in the Sources section links to the original Wikipedia article or web page. Click the external link icon to verify any source independently.",
+    },
+    {
+      question: "Where are my saved reports?",
+      answer:
+        "Reports are saved in your Dashboard. They are stored in your browser's localStorage, so they persist across sessions on the same device.",
     },
   ],
   account: [
     {
       question: "How is my data stored?",
       answer:
-        "Your account and report history are stored locally in your browser (localStorage). No data is sent to a server except the topic you submit for research.",
+        "Your account and report history are stored locally in your browser (localStorage). No personal data is sent to a server — only the topic you submit for research is processed externally.",
+    },
+    {
+      question: "Do I need an account to use ReportCraft?",
+      answer:
+        "No. You can run reports without an account. An account lets you access your report history across sessions and use the Dashboard to manage saved reports.",
     },
   ],
   troubleshooting: [
@@ -90,9 +98,9 @@ const faqs: Record<string, { question: string; answer: string }[]> = {
         "Try refreshing the page and submitting your topic again. If the problem persists, check your internet connection — ReportCraft needs to reach the Cohere API and Wikipedia to generate reports.",
     },
     {
-      question: "I got an error on the research page. What does it mean?",
+      question: "I got a timeout error. What does it mean?",
       answer:
-        "A timeout error usually means the AI took longer than allowed (30 seconds). Try a more specific topic or try again after a moment.",
+        "A timeout error usually means the AI took longer than 30 seconds. Try a more specific topic or try again after a moment. Very broad topics (e.g. 'History') can take longer.",
     },
   ],
 };
@@ -120,144 +128,228 @@ export default function HelpPage() {
     : currentFaqs;
 
   return (
-    <div className="min-h-screen bg-[var(--background)] py-20 px-4 sm:px-8 relative overflow-hidden">
-      {/* Background blobs */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--rc-accent)]/10 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none" />
-
+    <div
+      className="min-h-screen py-16 md:py-24"
+      style={{ background: "var(--background)" }}
+    >
       {/* Hero */}
-      <section className="relative py-20 text-center mb-20">
-        <div className="mx-auto max-w-3xl">
+      <section
+        className="py-16 border-b"
+        style={{ borderColor: "var(--border)" }}
+      >
+        <div className="mx-auto max-w-[1200px] px-5 md:px-8">
           <FadeInSection>
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[var(--card-bg)] border border-[var(--border)] shadow-sm mb-8 text-[var(--rc-accent)]">
-              <LifeBuoy size={32} />
-            </div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
-              Help &amp; <span className="text-gradient">Support</span>
+            <span
+              className="inline-block text-xs font-semibold uppercase tracking-widest mb-5"
+              style={{ color: "var(--rc-accent)" }}
+            >
+              Help & Documentation
+            </span>
+            <h1
+              className="text-4xl md:text-5xl font-semibold tracking-tight mb-4"
+              style={{ letterSpacing: "-0.02em", color: "var(--text-primary)" }}
+            >
+              How can we help?
             </h1>
-            <p className="text-lg text-[var(--text-secondary)] leading-relaxed">
-              Browse common questions or search for a specific topic below.
+            <p
+              className="text-base max-w-md leading-relaxed mb-8"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              Browse common questions below. Use search to find a specific topic.
             </p>
 
             {/* Search */}
-            <div className="relative mt-12 max-w-xl mx-auto group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[var(--rc-accent)]/20 to-[var(--rc-accent)]/20 rounded-2xl blur opacity-0 group-focus-within:opacity-100 transition duration-500"></div>
-              <div className="relative">
-                <Search
-                  size={20}
-                  className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20"
-                />
-                 <input
-                  type="text"
-                  id="help-search"
-                  className="zephyr-input w-full pl-14 py-5 text-lg"
-                  placeholder="Search for help..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  aria-label="Search help articles"
-                />
-              </div>
+            <div className="relative max-w-lg">
+              <label htmlFor="help-search" className="sr-only">
+                Search help articles
+              </label>
+              <input
+                type="text"
+                id="help-search"
+                className="zephyr-input w-full"
+                style={{ paddingLeft: "44px" }}
+                placeholder="Search — e.g. export, citations, timeout…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Search help articles"
+              />
+              <Search
+                size={16}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                style={{ color: "var(--text-tertiary)" }}
+                aria-hidden="true"
+              />
             </div>
           </FadeInSection>
         </div>
       </section>
 
-      <div className="mx-auto max-w-6xl pb-32">
-        <div className="grid gap-12 lg:grid-cols-[280px_1fr]">
-          {/* Sidebar Categories */}
+      {/* Content */}
+      <div className="mx-auto max-w-[1200px] px-5 md:px-8 py-12 pb-24">
+        <div className="grid gap-12 lg:grid-cols-[240px_1fr]">
+
+          {/* Sidebar */}
           {!searchQuery && (
-            <FadeInSection className="lg:col-span-1">
-              <div className="space-y-2 sticky top-32">
-                <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-tertiary)] ml-4 mb-5">Categories</p>
-                {categories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => {
-                      setActiveCategory(cat.id);
-                      setExpandedFaqs([]);
-                    }}
-                    className={`flex items-center gap-4 w-full px-5 py-4 rounded-xl text-sm font-bold transition-all text-left border ${
-                      activeCategory === cat.id
-                        ? "bg-white/5 border-[var(--rc-accent)]/30 text-[var(--rc-accent)] shadow-lg shadow-cyan-500/5"
-                        : "bg-white/[0.02] border-white/5 text-[var(--text-secondary)] hover:bg-white/[0.05] hover:border-white/10"
-                    }`}
-                  >
-                    <cat.icon size={18} className={activeCategory === cat.id ? "text-[var(--rc-accent)]" : "opacity-30"} />
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-            </FadeInSection>
+            <aside className="lg:sticky lg:top-20 lg:self-start">
+              <p
+                className="text-[10px] font-semibold uppercase tracking-widest mb-3 px-1"
+                style={{ color: "var(--text-tertiary)" }}
+              >
+                Categories
+              </p>
+              <nav aria-label="Help categories" className="space-y-0.5">
+                {categories.map((cat) => {
+                  const isActive = activeCategory === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => {
+                        setActiveCategory(cat.id);
+                        setExpandedFaqs([]);
+                      }}
+                      className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-md text-sm font-medium transition-colors text-left ${
+                        isActive
+                          ? "bg-[var(--surface)] text-[var(--text-primary)]"
+                          : "text-[var(--text-secondary)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]"
+                      }`}
+                      aria-current={isActive ? "true" : undefined}
+                    >
+                      <cat.icon
+                        size={15}
+                        aria-hidden="true"
+                        style={{
+                          color: isActive ? "var(--rc-accent)" : "var(--text-tertiary)",
+                        }}
+                      />
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </nav>
+            </aside>
           )}
 
-          {/* FAQ Content */}
-          <div className={searchQuery ? "lg:col-span-2" : "lg:col-span-1"}>
+          {/* FAQs */}
+          <div className={searchQuery ? "lg:col-span-2" : ""}>
             {!searchQuery && (
-              <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-tertiary)] ml-2 mb-5">Questions</p>
+              <p
+                className="text-[10px] font-semibold uppercase tracking-widest mb-4 px-1"
+                style={{ color: "var(--text-tertiary)" }}
+              >
+                {categories.find((c) => c.id === activeCategory)?.label}
+              </p>
             )}
+
             <AnimatePresence mode="wait">
               <motion.div
                 key={searchQuery || activeCategory}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                className="space-y-4"
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-2"
               >
                 {filteredFaqs.length === 0 ? (
-                  <div className="card-clean p-12 text-center">
-                    <p className="text-base text-[var(--text-secondary)]">
-                      No results found. Try a different search term.
+                  <div
+                    className="card-clean p-10 text-center"
+                  >
+                    <p
+                      className="text-sm"
+                      style={{ color: "var(--text-secondary)" }}
+                    >
+                      No results for &quot;{searchQuery}&quot;. Try a different search term.
                     </p>
                   </div>
                 ) : (
-                  filteredFaqs.map((faq, index) => (
-                    <div key={index} className="card-clean overflow-hidden hover:border-white/20 transition-all">
-                      <button
-                        onClick={() => toggleFaq(index)}
-                        className="flex items-center justify-between w-full p-8 text-left gap-8 group"
+                  filteredFaqs.map((faq, index) => {
+                    const isOpen = expandedFaqs.includes(index);
+                    return (
+                      <div
+                        key={index}
+                        className="card-clean overflow-hidden"
+                        style={isOpen ? { borderColor: "var(--border-hover)" } : {}}
                       >
-                        <span className="text-lg font-bold tracking-tight group-hover:text-[var(--rc-accent)] transition-colors">
-                          {faq.question}
-                        </span>
-                        <div className={`p-2 rounded-lg bg-white/5 transition-all ${expandedFaqs.includes(index) ? "rotate-180 bg-cyan-400 text-black" : "text-white/20"}`}>
-                          <ChevronDown size={20} />
-                        </div>
-                      </button>
-                      <AnimatePresence>
-                        {expandedFaqs.includes(index) && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.4, ease: "circOut" }}
-                            className="overflow-hidden bg-white/[0.01]"
+                        <button
+                          onClick={() => toggleFaq(index)}
+                          className="flex items-center justify-between w-full px-6 py-5 text-left gap-6"
+                          aria-expanded={isOpen}
+                          aria-controls={`faq-answer-${index}`}
+                        >
+                          <span
+                            className="text-sm font-semibold tracking-tight"
+                            style={{ color: "var(--text-primary)" }}
                           >
-                            <div className="p-8 pt-0 text-base leading-relaxed text-[var(--text-secondary)] opacity-70 border-t border-white/5">
-                              {faq.answer}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ))
+                            {faq.question}
+                          </span>
+                          <div
+                            className="p-1 rounded shrink-0 transition-transform duration-200"
+                            style={{
+                              transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                              color: isOpen ? "var(--rc-accent)" : "var(--text-tertiary)",
+                            }}
+                          >
+                            <ChevronDown size={17} aria-hidden="true" />
+                          </div>
+                        </button>
+
+                        <AnimatePresence>
+                          {isOpen && (
+                            <motion.div
+                              id={`faq-answer-${index}`}
+                              role="region"
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.25, ease: "circOut" }}
+                              className="overflow-hidden"
+                            >
+                              <div
+                                className="px-6 pb-6 text-sm leading-relaxed border-t pt-4"
+                                style={{
+                                  color: "var(--text-secondary)",
+                                  borderColor: "var(--border)",
+                                }}
+                              >
+                                {faq.answer}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  })
                 )}
               </motion.div>
             </AnimatePresence>
 
             {/* Support CTA */}
-            <FadeInSection delay={0.4} className="mt-12">
-              <div className="card-clean p-8 border border-cyan-500/20 bg-gradient-to-r from-[var(--rc-accent)]/5 to-transparent flex flex-col sm:flex-row items-center justify-between gap-6">
+            <FadeInSection delay={0.2} className="mt-10">
+              <div
+                className="card-clean p-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
+              >
                 <div>
-                  <h3 className="text-lg font-bold mb-1.5">Still need help?</h3>
-                  <p className="text-sm text-[var(--text-secondary)]">Open a GitHub issue or reach out directly.</p>
+                  <h3
+                    className="text-base font-semibold mb-1"
+                    style={{ color: "var(--text-primary)" }}
+                  >
+                    Still need help?
+                  </h3>
+                  <p
+                    className="text-sm"
+                    style={{ color: "var(--text-secondary)" }}
+                  >
+                    Open an issue on GitHub and we&apos;ll respond there.
+                  </p>
                 </div>
                 <a
-                  href="https://github.com"
+                  href="https://github.com/shriya7756/ReportCraft/issues"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-zephyr btn-zephyr-primary px-7 py-3.5 text-sm whitespace-nowrap"
+                  className="btn-zephyr btn-zephyr-secondary px-6 py-2.5 text-sm flex items-center gap-2 shrink-0"
+                  aria-label="Open a GitHub issue for support"
                 >
-                  Contact support
+                  <Github size={15} aria-hidden="true" />
+                  Open an issue
                 </a>
               </div>
             </FadeInSection>

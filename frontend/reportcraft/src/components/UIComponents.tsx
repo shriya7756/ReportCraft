@@ -18,13 +18,13 @@ export function FadeInSection({
   direction?: "up" | "down" | "left" | "right";
 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
 
   const directionMap = {
-    up: { y: 30, x: 0 },
-    down: { y: -30, x: 0 },
-    left: { x: 30, y: 0 },
-    right: { x: -30, y: 0 },
+    up: { y: 20, x: 0 },
+    down: { y: -20, x: 0 },
+    left: { x: 20, y: 0 },
+    right: { x: -20, y: 0 },
   };
 
   return (
@@ -33,7 +33,7 @@ export function FadeInSection({
       className={className}
       initial={{ opacity: 0, ...directionMap[direction] }}
       animate={isInView ? { opacity: 1, y: 0, x: 0 } : {}}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>
@@ -46,14 +46,14 @@ export function FadeInSection({
 export function StaggerContainer({
   children,
   className = "",
-  staggerDelay = 0.08,
+  staggerDelay = 0.07,
 }: {
   children: ReactNode;
   className?: string;
   staggerDelay?: number;
 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-30px" });
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
 
   return (
     <motion.div
@@ -86,8 +86,12 @@ export function StaggerItem({
     <motion.div
       className={className}
       variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+        hidden: { opacity: 0, y: 18 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+        },
       }}
     >
       {children}
@@ -122,13 +126,13 @@ export function SkeletonLine({
 export function SkeletonCard({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`card-premium p-6 space-y-4 ${className}`}
+      className={`card-clean p-6 space-y-4 ${className}`}
       aria-hidden="true"
     >
-      <SkeletonLine width="60%" height="20px" />
+      <SkeletonLine width="55%" height="20px" />
       <SkeletonLine width="100%" height="12px" />
-      <SkeletonLine width="90%" height="12px" />
-      <SkeletonLine width="45%" height="12px" />
+      <SkeletonLine width="85%" height="12px" />
+      <SkeletonLine width="40%" height="12px" />
     </div>
   );
 }
@@ -138,7 +142,7 @@ export function SkeletonCard({ className = "" }: { className?: string }) {
  */
 export function CountUp({
   end,
-  duration = 2,
+  duration = 1.8,
   suffix = "",
   prefix = "",
   className = "",
@@ -168,13 +172,13 @@ export function CountUp({
 
   return (
     <span ref={ref} className={className}>
-      {prefix}{count}{suffix}
+      {prefix}{count.toLocaleString()}{suffix}
     </span>
   );
 }
 
 /**
- * ProgressBar - Gradient progress bar
+ * ProgressBar - Clean progress bar
  */
 export function ProgressBar({
   value,
@@ -189,30 +193,36 @@ export function ProgressBar({
     <div className={className}>
       {label && (
         <div className="flex justify-between mb-2">
-          <span className="text-sm font-semibold tracking-tight" style={{ color: "var(--text-primary)" }}>
+          <span
+            className="text-sm font-medium"
+            style={{ color: "var(--text-primary)" }}
+          >
             {label}
           </span>
-          <span className="text-sm font-medium opacity-60" style={{ color: "var(--text-secondary)" }}>
+          <span
+            className="text-sm"
+            style={{ color: "var(--text-secondary)" }}
+          >
             {Math.round(value)}%
           </span>
         </div>
       )}
-      <div className="progress-bar rounded-full h-2.5 bg-zinc-200 dark:bg-zinc-800" role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={100}>
-        <div 
-          className="h-full rounded-full transition-all duration-500 ease-out" 
-          style={{ 
-            width: `${value}%`, 
-            background: "linear-gradient(90deg, var(--zephyr-cyan), var(--zephyr-indigo))",
-            boxShadow: "0 0 10px rgba(34, 211, 238, 0.4)"
-          }} 
-        />
+      <div
+        className="progress-track"
+        role="progressbar"
+        aria-valuenow={value}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={label || "Progress"}
+      >
+        <div className="progress-fill" style={{ width: `${value}%` }} />
       </div>
     </div>
   );
 }
 
 /**
- * EmptyState - Illustration with text for empty states
+ * EmptyState - Clean empty state illustration
  */
 export function EmptyState({
   title,
@@ -225,34 +235,42 @@ export function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
-      <div className="relative mb-10">
-        <div className="absolute inset-0 bg-[var(--rc-accent)]/10 blur-3xl rounded-full" />
+      {/* Document icon */}
+      <div className="mb-8" aria-hidden="true">
         <svg
-          width="120"
-          height="120"
-          viewBox="0 0 120 120"
+          width="56"
+          height="56"
+          viewBox="0 0 56 56"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="relative drop-shadow-2xl"
-          aria-hidden="true"
         >
-          <circle cx="60" cy="60" r="50" fill="url(#zephyr-grad)" fillOpacity="0.1" />
-          <defs>
-            <linearGradient id="zephyr-grad" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
-              <stop stopColor="var(--zephyr-cyan)" />
-              <stop offset="1" stopColor="var(--zephyr-indigo)" />
-            </linearGradient>
-          </defs>
-          <path d="M40 45C40 42.2386 42.2386 40 45 40H75C77.7614 40 80 42.2386 80 45V85C80 87.7614 77.7614 90 75 90H45C42.2386 90 40 87.7614 40 85V45Z" fill="var(--surface-elevated)" stroke="var(--border)" strokeWidth="1.5" />
-          <rect x="50" y="52" width="20" height="1" rx="0.5" fill="var(--border)" />
-          <rect x="50" y="58" width="15" height="1" rx="0.5" fill="var(--border)" />
-          <rect x="50" y="64" width="22" height="1" rx="0.5" fill="var(--border)" />
+          <rect
+            x="1"
+            y="1"
+            width="54"
+            height="54"
+            rx="8"
+            fill="var(--surface)"
+            stroke="var(--border)"
+            strokeWidth="1.5"
+          />
+          <rect x="16" y="18" width="24" height="2" rx="1" fill="var(--border-hover)" />
+          <rect x="16" y="24" width="18" height="2" rx="1" fill="var(--border-hover)" />
+          <rect x="16" y="30" width="21" height="2" rx="1" fill="var(--border-hover)" />
+          <rect x="16" y="36" width="14" height="2" rx="1" fill="var(--border)" />
         </svg>
       </div>
-      <h3 className="text-xl font-bold tracking-tight mb-3" style={{ color: "var(--text-primary)" }}>
+
+      <h3
+        className="text-lg font-semibold tracking-tight mb-2"
+        style={{ color: "var(--text-primary)" }}
+      >
         {title}
       </h3>
-      <p className="text-base max-w-sm mb-8 leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+      <p
+        className="text-sm max-w-xs mb-8 leading-relaxed"
+        style={{ color: "var(--text-secondary)" }}
+      >
         {description}
       </p>
       {action}

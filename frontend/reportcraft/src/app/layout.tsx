@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Outfit } from "next/font/google";
+import { Inter, JetBrains_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/components/AuthProvider";
@@ -19,16 +19,22 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const outfit = Outfit({
-  variable: "--font-display",
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
   subsets: ["latin"],
   display: "swap",
+  weight: "400",
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
-  title: "ReportCraft — AI Research Reports with Real Citations",
+  metadataBase: new URL("https://reportcraft.app"),
+  title: {
+    default: "ReportCraft — AI Research Reports with Real Citations",
+    template: "%s — ReportCraft",
+  },
   description:
-    "Enter a topic. Get a structured research report powered by Cohere Command R+, backed by live web sources and inline citations. Free to try.",
+    "Enter any topic. Receive a structured research report powered by Cohere Command R+, grounded in live web sources with inline citations. No manual tab-juggling.",
   keywords: [
     "AI research tool",
     "research reports",
@@ -36,32 +42,40 @@ export const metadata: Metadata = {
     "cited reports",
     "AI research assistant",
     "ReportCraft",
+    "automated research",
+    "web citations",
   ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
   icons: {
     icon: [
       { url: "/icons8-research-dotted-16.png", sizes: "16x16", type: "image/png" },
       { url: "/icons8-research-dotted-32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icons8-research-dotted-70.png", sizes: "70x70", type: "image/png" },
-      { url: "/icons8-research-dotted-72.png", sizes: "72x72", type: "image/png" },
       { url: "/icons8-research-dotted-96.png", sizes: "96x96", type: "image/png" },
     ],
     apple: [
-      { url: "/icons8-research-dotted-70.png", sizes: "70x70", type: "image/png" },
       { url: "/icons8-research-dotted-72.png", sizes: "72x72", type: "image/png" },
     ],
   },
   openGraph: {
     title: "ReportCraft — AI Research Reports with Real Citations",
     description:
-      "Enter a topic. Get a structured report backed by live web sources in minutes, powered by Cohere Command R+.",
+      "Enter a topic. Get a structured report grounded in live web sources in under a minute, powered by Cohere Command R+.",
     type: "website",
     siteName: "ReportCraft",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
     title: "ReportCraft — AI Research Reports with Real Citations",
     description:
-      "Enter a topic. Get a structured report backed by live web sources in minutes, powered by Cohere Command R+.",
+      "Enter a topic. Get a structured report grounded in live web sources in under a minute, powered by Cohere Command R+.",
   },
 };
 
@@ -73,7 +87,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} ${outfit.variable} antialiased`}
+        className={`${inter.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable} antialiased`}
+        style={{ fontFamily: "var(--font-inter, Inter), system-ui, sans-serif" }}
       >
         <AuthProvider>
           <ThemeProvider>
@@ -92,6 +107,7 @@ export default function RootLayout({
                   background: "var(--card-bg)",
                   color: "var(--text-primary)",
                   border: "1px solid var(--border)",
+                  fontSize: "0.875rem",
                 },
               }}
             />

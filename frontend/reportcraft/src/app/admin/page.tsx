@@ -2,29 +2,36 @@
 
 import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { 
-  Users, 
-  FileText, 
-  Activity, 
-  ShieldCheck, 
+import { useEffect } from "react";
+import {
+  Users,
+  FileText,
+  Activity,
+  ShieldCheck,
   ArrowLeft,
-  Search,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
 import { StaggerContainer, StaggerItem, FadeInSection } from "@/components/UIComponents";
 
+const logs = [
+  { id: 1, user: "shriya@example.com", action: "Generated Report", target: "Quantum Computing", time: "2 min ago" },
+  { id: 2, user: "john@doe.com", action: "Generated Report", target: "Neural Scaling Laws", time: "15 min ago" },
+  { id: 3, user: "sarah@tech.io", action: "Exported Report", target: "Startup Funding Trends", time: "1 hr ago" },
+  { id: 4, user: "admin@ReportCraft.com", action: "Signed in", target: "System", time: "2 hr ago" },
+];
+
+const securityChecks = [
+  { label: "All AI agents operational", status: "ok" },
+  { label: "Cohere API reachable", status: "ok" },
+  { label: "3 rate-limited requests in last hour", status: "warn" },
+];
+
 export default function AdminPage() {
   const { user, isLoading } = useAuth();
   const router = useRouter();
-  const [logs, setLogs] = useState([
-    { id: 1, user: "shriya@example.com", action: "Generated Report", target: "Quantum Computing", time: "2 mins ago" },
-    { id: 2, user: "john@doe.com", action: "Uploaded Paper", target: "neural_net.pdf", time: "15 mins ago" },
-    { id: 3, user: "sarah@tech.io", action: "Asked Question", target: "What is ROI of AI?", time: "1 hour ago" },
-    { id: 4, user: "admin@ReportCraft.com", action: "Login", target: "System", time: "2 hours ago" },
-  ]);
 
   useEffect(() => {
     if (!isLoading && (!user || user.role !== "admin")) {
@@ -32,56 +39,150 @@ export default function AdminPage() {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading || !user || user.role !== "admin") return null;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[70vh]">
+        <Loader2
+          className="animate-spin"
+          size={28}
+          style={{ color: "var(--rc-accent)" }}
+          aria-label="Loading"
+        />
+      </div>
+    );
+  }
+
+  if (!user || user.role !== "admin") return null;
+
+  const statTiles = [
+    { label: "Active users (demo)", value: "1,284", icon: Users },
+    { label: "Total reports (demo)", value: "8,432", icon: FileText },
+    { label: "System health", value: "99.9%", icon: ShieldCheck },
+  ];
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA]">
-      <div className="mx-auto max-w-7xl px-8 py-16">
-        <header className="mb-16 flex items-center justify-between">
+    <div
+      className="min-h-screen py-14"
+      style={{ background: "var(--background)" }}
+    >
+      <div className="mx-auto max-w-[1200px] px-5 md:px-8">
+
+        {/* Header */}
+        <header className="flex items-start justify-between gap-6 mb-12">
           <div>
-            <h1 className="text-5xl font-black tracking-tighter uppercase">Admin <span className="text-[#B3F53C]" style={{ WebkitTextStroke: "2px black" }}>Command.</span></h1>
-            <p className="mt-4 text-xl font-bold text-gray-500">System-wide transparency and control.</p>
+            <span
+              className="inline-block text-xs font-semibold uppercase tracking-widest mb-3"
+              style={{ color: "var(--rc-accent)" }}
+            >
+              Admin
+            </span>
+            <h1
+              className="text-3xl md:text-4xl font-semibold tracking-tight"
+              style={{ letterSpacing: "-0.02em", color: "var(--text-primary)" }}
+            >
+              System overview
+            </h1>
           </div>
-          <Link href="/dashboard" className="flex items-center gap-2 font-black uppercase hover:underline">
-            <ArrowLeft size={20} /> Dashboard
+          <Link
+            href="/dashboard"
+            className="btn-zephyr btn-zephyr-secondary px-5 py-2.5 text-sm flex items-center gap-2 shrink-0"
+            aria-label="Back to dashboard"
+          >
+            <ArrowLeft size={15} aria-hidden="true" />
+            Dashboard
           </Link>
         </header>
 
-        <StaggerContainer className="grid gap-8 grid-cols-1 md:grid-cols-3 mb-16">
-          {[
-            { label: "Active Users", value: "1,284", icon: Users, color: "#B3F53C" },
-            { label: "Total Reports", value: "8,432", icon: FileText, color: "#FFFFFF" },
-            { label: "System Health", value: "99.9%", icon: ShieldCheck, color: "#B3F53C" },
-          ].map((stat, i) => (
+        {/* Stats */}
+        <StaggerContainer className="grid gap-4 grid-cols-1 sm:grid-cols-3 mb-10">
+          {statTiles.map((stat, i) => (
             <StaggerItem key={i}>
-              <div className="bg-white border-8 border-black p-8 shadow-[12px_12px_0_0_black]">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="p-4 border-4 border-black" style={{ background: stat.color }}>
-                    <stat.icon size={24} />
-                  </div>
-                  <span className="text-4xl font-black">{stat.value}</span>
+              <div className="card-clean p-6 flex items-center gap-4">
+                <div
+                  className="w-10 h-10 rounded-md border flex items-center justify-center shrink-0"
+                  style={{
+                    background: "var(--surface)",
+                    borderColor: "var(--border)",
+                    color: "var(--text-tertiary)",
+                  }}
+                  aria-hidden="true"
+                >
+                  <stat.icon size={18} />
                 </div>
-                <h3 className="text-xl font-black uppercase tracking-widest">{stat.label}</h3>
+                <div>
+                  <p
+                    className="text-xl font-semibold tracking-tight"
+                    style={{ color: "var(--text-primary)" }}
+                  >
+                    {stat.value}
+                  </p>
+                  <p
+                    className="text-xs font-medium"
+                    style={{ color: "var(--text-tertiary)" }}
+                  >
+                    {stat.label}
+                  </p>
+                </div>
               </div>
             </StaggerItem>
           ))}
         </StaggerContainer>
 
-        <div className="grid lg:grid-cols-2 gap-16">
+        {/* Two-column panels */}
+        <div className="grid lg:grid-cols-2 gap-6 pb-24">
+
+          {/* Activity log */}
           <FadeInSection>
-            <div className="bg-black text-white p-12 border-8 border-black shadow-[16px_16px_0_0_#B3F53C]">
-              <h2 className="text-4xl font-black uppercase tracking-tighter mb-8 flex items-center gap-4">
-                <Activity className="text-[#B3F53C]" /> Live Activity
-              </h2>
-              <div className="space-y-6">
+            <div className="card-clean h-full">
+              <div
+                className="flex items-center gap-3 px-6 py-4 border-b"
+                style={{ borderColor: "var(--border)" }}
+              >
+                <Activity
+                  size={16}
+                  style={{ color: "var(--rc-accent)" }}
+                  aria-hidden="true"
+                />
+                <h2
+                  className="text-sm font-semibold"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  Recent activity
+                </h2>
+                <span
+                  className="ml-auto text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border"
+                  style={{
+                    background: "var(--surface)",
+                    borderColor: "var(--border)",
+                    color: "var(--text-tertiary)",
+                  }}
+                >
+                  Demo data
+                </span>
+              </div>
+              <div className="divide-y" style={{ borderColor: "var(--border)" }}>
                 {logs.map((log) => (
-                  <div key={log.id} className="border-b-2 border-white/20 pb-4 last:border-0">
-                    <div className="flex justify-between items-start mb-1">
-                      <span className="font-black text-[#B3F53C]">{log.user}</span>
-                      <span className="text-xs font-bold text-white/40">{log.time}</span>
+                  <div key={log.id} className="px-6 py-4">
+                    <div className="flex items-start justify-between gap-4 mb-1">
+                      <span
+                        className="text-sm font-medium truncate"
+                        style={{ color: "var(--text-primary)" }}
+                      >
+                        {log.user}
+                      </span>
+                      <span
+                        className="text-xs shrink-0 font-mono"
+                        style={{ color: "var(--text-tertiary)" }}
+                      >
+                        {log.time}
+                      </span>
                     </div>
-                    <p className="text-sm font-bold">
-                      {log.action}: <span className="italic text-white/80">{log.target}</span>
+                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
+                      {log.action}
+                      {" — "}
+                      <span style={{ color: "var(--text-tertiary)" }}>
+                        {log.target}
+                      </span>
                     </p>
                   </div>
                 ))}
@@ -89,28 +190,64 @@ export default function AdminPage() {
             </div>
           </FadeInSection>
 
-          <FadeInSection>
-            <div className="bg-white p-12 border-8 border-black shadow-[16px_16px_0_0_black]">
-              <h2 className="text-4xl font-black uppercase tracking-tighter mb-8 flex items-center gap-4">
-                <ShieldCheck /> Security Status
-              </h2>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 p-4 border-4 border-black bg-[#B3F53C]/10">
-                  <CheckCircle className="text-emerald-500" />
-                  <span className="font-black">All AI agents operational</span>
-                </div>
-                <div className="flex items-center gap-4 p-4 border-4 border-black bg-[#B3F53C]/10">
-                  <CheckCircle className="text-emerald-500" />
-                  <span className="font-black">Database synchronized</span>
-                </div>
-                <div className="flex items-center gap-4 p-4 border-4 border-black bg-amber-50">
-                  <AlertCircle className="text-amber-500" />
-                  <span className="font-black text-amber-900">3 flagged research attempts (Rate Limit)</span>
-                </div>
+          {/* Security status */}
+          <FadeInSection delay={0.1}>
+            <div className="card-clean h-full">
+              <div
+                className="flex items-center gap-3 px-6 py-4 border-b"
+                style={{ borderColor: "var(--border)" }}
+              >
+                <ShieldCheck
+                  size={16}
+                  style={{ color: "var(--rc-accent)" }}
+                  aria-hidden="true"
+                />
+                <h2
+                  className="text-sm font-semibold"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  Security status
+                </h2>
               </div>
-              <button className="mt-8 w-full bg-black text-white p-4 font-black uppercase tracking-widest hover:bg-[#B3F53C] hover:text-black transition-colors border-4 border-black">
-                Generate System Audit
-              </button>
+              <div className="p-6 space-y-3">
+                {securityChecks.map((check, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 px-4 py-3 rounded-md border"
+                    style={
+                      check.status === "ok"
+                        ? {
+                            background: "rgba(34, 197, 94, 0.04)",
+                            borderColor: "rgba(34, 197, 94, 0.15)",
+                          }
+                        : {
+                            background: "rgba(245, 158, 11, 0.04)",
+                            borderColor: "rgba(245, 158, 11, 0.15)",
+                          }
+                    }
+                  >
+                    {check.status === "ok" ? (
+                      <CheckCircle
+                        size={15}
+                        className="text-emerald-500 shrink-0"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <AlertCircle
+                        size={15}
+                        className="text-amber-500 shrink-0"
+                        aria-hidden="true"
+                      />
+                    )}
+                    <span
+                      className="text-sm font-medium"
+                      style={{ color: "var(--text-primary)" }}
+                    >
+                      {check.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </FadeInSection>
         </div>

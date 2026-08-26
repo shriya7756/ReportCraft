@@ -42,22 +42,26 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-[90vh] flex items-center justify-center py-20 px-6 md:px-8 relative overflow-hidden">
-      {/* Ambient background */}
-            
+    <div
+      className="min-h-[88vh] flex items-center justify-center py-16 px-5"
+      style={{ background: "var(--background)" }}
+    >
       <motion.div
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4 }}
-        className="w-full max-w-md relative"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="w-full max-w-[400px]"
       >
-        <div className="card-clean p-10 sm:p-12 border border-white/10">
+        <div className="card-clean p-8">
           {/* Header */}
-          <div className="mb-10">
-            <h1 className="text-4xl font-black tracking-tight mb-2">
+          <div className="mb-7">
+            <h1
+              className="text-2xl font-semibold tracking-tight mb-1.5"
+              style={{ letterSpacing: "-0.02em", color: "var(--text-primary)" }}
+            >
               Create account
             </h1>
-            <p className="text-[var(--text-secondary)]">
+            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
               Start researching any topic in seconds.
             </p>
           </div>
@@ -67,7 +71,12 @@ export default function SignupPage() {
             <div
               role="alert"
               aria-live="assertive"
-              className="mb-6 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-sm text-red-400 font-medium"
+              className="mb-5 px-4 py-3 rounded-md border text-sm font-medium"
+              style={{
+                background: "rgba(239,68,68,0.05)",
+                borderColor: "rgba(239,68,68,0.2)",
+                color: "#dc2626",
+              }}
             >
               {error}
             </div>
@@ -196,28 +205,29 @@ export default function SignupPage() {
               type="submit"
               id="signup-submit"
               disabled={isSubmitting}
-              className="btn-zephyr btn-zephyr-primary w-full py-4 text-base flex items-center justify-center gap-2.5 mt-2"
+              className="btn-zephyr btn-zephyr-primary w-full py-3 text-sm flex items-center justify-center gap-2 mt-1"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 size={18} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={15} className="animate-spin" aria-hidden="true" />
                   Creating account…
                 </>
               ) : (
-                <>
-                  <UserPlus size={18} aria-hidden="true" />
-                  Create account
-                </>
+                <>Create account</>
               )}
             </button>
           </form>
 
-          <div className="mt-8 pt-8 border-t border-white/5 text-center">
-            <p className="text-sm text-[var(--text-secondary)]">
+          <div
+            className="mt-6 pt-6 border-t text-center"
+            style={{ borderColor: "var(--border)" }}
+          >
+            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="text-indigo-400 font-semibold hover:underline"
+                className="font-semibold hover:underline"
+                style={{ color: "var(--rc-accent)" }}
               >
                 Sign in
               </Link>

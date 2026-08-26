@@ -5,6 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { Logo } from "@/components/Logo";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -21,29 +22,41 @@ export default function LoginPage() {
 
     try {
       await login(email, pass);
-      // On success, AuthProvider handles redirect
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Try again.");
+      setError(
+        err instanceof Error ? err.message : "Something went wrong. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-[90vh] flex items-center justify-center py-20 px-6 md:px-8 relative overflow-hidden">
-      {/* Ambient background */}
-            
+    <div
+      className="min-h-[88vh] flex items-center justify-center py-16 px-5"
+      style={{ background: "var(--background)" }}
+    >
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="w-full max-w-md relative"
+        transition={{ duration: 0.35 }}
+        className="w-full max-w-[400px]"
       >
-        <div className="card-clean p-10 sm:p-12 border border-white/10">
+        {/* Logo */}
+        <div className="flex justify-center mb-8">
+          <Logo size={30} />
+        </div>
+
+        <div className="card-clean p-8">
           {/* Header */}
-          <div className="mb-10">
-            <h1 className="text-4xl font-black tracking-tight mb-2">Sign in</h1>
-            <p className="text-[var(--text-secondary)]">
+          <div className="mb-7">
+            <h1
+              className="text-2xl font-semibold tracking-tight mb-1.5"
+              style={{ letterSpacing: "-0.02em", color: "var(--text-primary)" }}
+            >
+              Sign in
+            </h1>
+            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
               Welcome back. Sign in to access your reports.
             </p>
           </div>
@@ -53,18 +66,24 @@ export default function LoginPage() {
             <div
               role="alert"
               aria-live="assertive"
-              className="mb-6 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-sm text-red-400 font-medium"
+              className="mb-5 px-4 py-3 rounded-md border text-sm font-medium"
+              style={{
+                background: "rgba(239,68,68,0.05)",
+                borderColor: "rgba(239,68,68,0.2)",
+                color: "#dc2626",
+              }}
             >
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {/* Email */}
-            <div className="space-y-2">
+            <div>
               <label
                 htmlFor="login-email"
-                className="block text-sm font-semibold text-[var(--text-secondary)]"
+                className="block text-sm font-medium mb-1.5"
+                style={{ color: "var(--text-secondary)" }}
               >
                 Email
               </label>
@@ -75,7 +94,7 @@ export default function LoginPage() {
                   required
                   autoComplete="email"
                   className="zephyr-input w-full"
-                  style={{ paddingLeft: "44px" }}
+                  style={{ paddingLeft: "42px" }}
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => {
@@ -85,28 +104,31 @@ export default function LoginPage() {
                   aria-describedby={error ? "login-error" : undefined}
                 />
                 <Mail
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]"
-                  size={17}
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2"
+                  size={15}
+                  style={{ color: "var(--text-tertiary)" }}
                   aria-hidden="true"
                 />
               </div>
             </div>
 
             {/* Password */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
                 <label
                   htmlFor="login-password"
-                  className="block text-sm font-semibold text-[var(--text-secondary)]"
+                  className="block text-sm font-medium"
+                  style={{ color: "var(--text-secondary)" }}
                 >
                   Password
                 </label>
-                <a
+                <Link
                   href="/help"
-                  className="text-xs text-[var(--rc-accent)] hover:underline font-medium"
+                  className="text-xs font-medium hover:underline"
+                  style={{ color: "var(--rc-accent)" }}
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
               <div className="relative">
                 <input
@@ -114,8 +136,8 @@ export default function LoginPage() {
                   type={showPass ? "text" : "password"}
                   required
                   autoComplete="current-password"
-                  className="zephyr-input w-full pr-12"
-                  style={{ paddingLeft: "44px" }}
+                  className="zephyr-input w-full pr-11"
+                  style={{ paddingLeft: "42px" }}
                   placeholder="••••••••"
                   value={pass}
                   onChange={(e) => {
@@ -124,20 +146,22 @@ export default function LoginPage() {
                   }}
                 />
                 <Lock
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]"
-                  size={17}
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2"
+                  size={15}
+                  style={{ color: "var(--text-tertiary)" }}
                   aria-hidden="true"
                 />
                 <button
                   type="button"
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
+                  style={{ color: "var(--text-tertiary)" }}
                   onClick={() => setShowPass(!showPass)}
                   aria-label={showPass ? "Hide password" : "Show password"}
                 >
                   {showPass ? (
-                    <EyeOff size={17} aria-hidden="true" />
+                    <EyeOff size={15} aria-hidden="true" />
                   ) : (
-                    <Eye size={17} aria-hidden="true" />
+                    <Eye size={15} aria-hidden="true" />
                   )}
                 </button>
               </div>
@@ -148,34 +172,50 @@ export default function LoginPage() {
               type="submit"
               id="login-submit"
               disabled={isSubmitting}
-              className="btn-zephyr btn-zephyr-primary w-full py-4 text-base flex items-center justify-center gap-2.5 mt-2"
+              className="btn-zephyr btn-zephyr-primary w-full py-3 text-sm flex items-center justify-center gap-2 mt-1"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 size={18} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={15} className="animate-spin" aria-hidden="true" />
                   Signing in…
                 </>
               ) : (
                 <>
                   Sign in
-                  <ArrowRight size={18} aria-hidden="true" />
+                  <ArrowRight size={15} aria-hidden="true" />
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-8 pt-8 border-t border-white/5 text-center">
-            <p className="text-sm text-[var(--text-secondary)]">
+          <div
+            className="mt-6 pt-6 border-t text-center"
+            style={{ borderColor: "var(--border)" }}
+          >
+            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
               Don&apos;t have an account?{" "}
               <Link
                 href="/signup"
-                className="text-[var(--rc-accent)] font-semibold hover:underline"
+                className="font-semibold hover:underline"
+                style={{ color: "var(--rc-accent)" }}
               >
                 Create account
               </Link>
             </p>
           </div>
         </div>
+
+        {/* Continue without account */}
+        <p className="text-center mt-5 text-sm" style={{ color: "var(--text-tertiary)" }}>
+          No account needed for your first report.{" "}
+          <Link
+            href="/research"
+            className="font-medium hover:underline"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            Try ReportCraft →
+          </Link>
+        </p>
       </motion.div>
     </div>
   );
