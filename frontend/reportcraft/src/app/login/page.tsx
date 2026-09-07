@@ -34,7 +34,7 @@ export default function LoginPage() {
   return (
     <div
       className="min-h-[88vh] flex items-center justify-center py-16 px-5"
-      style={{ background: "var(--background)" }}
+      style={{ background: "var(--sys-grouped-background)" }}
     >
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -47,30 +47,31 @@ export default function LoginPage() {
           <Logo size={30} />
         </div>
 
-        <div className="card-clean p-8">
+        {/* Liquid Glass card */}
+        <div className="glass-card p-8">
           {/* Header */}
           <div className="mb-7">
             <h1
-              className="text-2xl font-semibold tracking-tight mb-1.5"
-              style={{ letterSpacing: "-0.02em", color: "var(--text-primary)" }}
+              className="type-title2 mb-1.5"
+              style={{ color: "var(--text-primary)" }}
             >
               Sign in
             </h1>
-            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+            <p className="type-callout" style={{ color: "var(--text-secondary)" }}>
               Welcome back. Sign in to access your reports.
             </p>
           </div>
 
-          {/* Error message */}
+          {/* Error — systemRed semantic token */}
           {error && (
             <div
               role="alert"
               aria-live="assertive"
-              className="mb-5 px-4 py-3 rounded-md border text-sm font-medium"
+              className="mb-5 px-4 py-3 rounded-xl border type-callout font-medium"
               style={{
-                background: "rgba(239,68,68,0.05)",
-                borderColor: "rgba(239,68,68,0.2)",
-                color: "#dc2626",
+                background: "var(--sys-red-subtle)",
+                borderColor: "var(--sys-red-subtle-border)",
+                color: "var(--sys-red)",
               }}
             >
               {error}
@@ -82,7 +83,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="login-email"
-                className="block text-sm font-medium mb-1.5"
+                className="block type-subhead font-medium mb-1.5"
                 style={{ color: "var(--text-secondary)" }}
               >
                 Email
@@ -94,7 +95,7 @@ export default function LoginPage() {
                   required
                   autoComplete="email"
                   className="zephyr-input w-full"
-                  style={{ paddingLeft: "42px" }}
+                  style={{ paddingLeft: "44px" }}
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => {
@@ -103,9 +104,10 @@ export default function LoginPage() {
                   }}
                   aria-describedby={error ? "login-error" : undefined}
                 />
+                {/* Icon sits within 44pt input */}
                 <Mail
                   className="absolute left-3.5 top-1/2 -translate-y-1/2"
-                  size={15}
+                  size={16}
                   style={{ color: "var(--text-tertiary)" }}
                   aria-hidden="true"
                 />
@@ -117,15 +119,15 @@ export default function LoginPage() {
               <div className="flex items-center justify-between mb-1.5">
                 <label
                   htmlFor="login-password"
-                  className="block text-sm font-medium"
+                  className="block type-subhead font-medium"
                   style={{ color: "var(--text-secondary)" }}
                 >
                   Password
                 </label>
                 <Link
                   href="/help"
-                  className="text-xs font-medium hover:underline"
-                  style={{ color: "var(--rc-accent)" }}
+                  className="type-footnote font-medium hover:underline"
+                  style={{ color: "var(--sys-blue)" }}
                 >
                   Forgot password?
                 </Link>
@@ -136,8 +138,8 @@ export default function LoginPage() {
                   type={showPass ? "text" : "password"}
                   required
                   autoComplete="current-password"
-                  className="zephyr-input w-full pr-11"
-                  style={{ paddingLeft: "42px" }}
+                  className="zephyr-input w-full pr-12"
+                  style={{ paddingLeft: "44px" }}
                   placeholder="••••••••"
                   value={pass}
                   onChange={(e) => {
@@ -147,42 +149,43 @@ export default function LoginPage() {
                 />
                 <Lock
                   className="absolute left-3.5 top-1/2 -translate-y-1/2"
-                  size={15}
+                  size={16}
                   style={{ color: "var(--text-tertiary)" }}
                   aria-hidden="true"
                 />
+                {/* 44pt eye toggle */}
                 <button
                   type="button"
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
+                  className="absolute right-0 top-0 bottom-0 w-[44px] flex items-center justify-center transition-colors rounded-r-[10px]"
                   style={{ color: "var(--text-tertiary)" }}
                   onClick={() => setShowPass(!showPass)}
                   aria-label={showPass ? "Hide password" : "Show password"}
                 >
                   {showPass ? (
-                    <EyeOff size={15} aria-hidden="true" />
+                    <EyeOff size={16} aria-hidden="true" />
                   ) : (
-                    <Eye size={15} aria-hidden="true" />
+                    <Eye size={16} aria-hidden="true" />
                   )}
                 </button>
               </div>
             </div>
 
-            {/* Submit */}
+            {/* Submit — pill, 44pt, systemBlue */}
             <button
               type="submit"
               id="login-submit"
               disabled={isSubmitting}
-              className="btn-zephyr btn-zephyr-primary w-full py-3 text-sm flex items-center justify-center gap-2 mt-1"
+              className="btn-zephyr btn-zephyr-primary w-full type-headline flex items-center justify-center gap-2 mt-1"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 size={15} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
                   Signing in…
                 </>
               ) : (
                 <>
                   Sign in
-                  <ArrowRight size={15} aria-hidden="true" />
+                  <ArrowRight size={16} aria-hidden="true" />
                 </>
               )}
             </button>
@@ -192,12 +195,12 @@ export default function LoginPage() {
             className="mt-6 pt-6 border-t text-center"
             style={{ borderColor: "var(--border)" }}
           >
-            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+            <p className="type-callout" style={{ color: "var(--text-secondary)" }}>
               Don&apos;t have an account?{" "}
               <Link
                 href="/signup"
                 className="font-semibold hover:underline"
-                style={{ color: "var(--rc-accent)" }}
+                style={{ color: "var(--sys-blue)" }}
               >
                 Create account
               </Link>
@@ -206,7 +209,7 @@ export default function LoginPage() {
         </div>
 
         {/* Continue without account */}
-        <p className="text-center mt-5 text-sm" style={{ color: "var(--text-tertiary)" }}>
+        <p className="text-center mt-5 type-callout" style={{ color: "var(--text-tertiary)" }}>
           No account needed for your first report.{" "}
           <Link
             href="/research"
