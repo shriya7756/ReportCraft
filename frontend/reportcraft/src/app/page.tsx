@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Search, ArrowRight, Link2, FileText, Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import {
   FadeInSection,
   StaggerContainer,
@@ -52,11 +52,11 @@ export default function Home() {
       style={{ background: "var(--background)", color: "var(--text-primary)" }}
     >
       {/* ========== HERO ========== */}
-      <section className="relative min-h-[82vh] flex items-center pt-8 pb-24">
+      <section className="relative min-h-[86vh] flex items-center pt-8 pb-24">
         <div className="relative mx-auto max-w-[1200px] px-5 md:px-8 w-full">
-          <div className="max-w-[700px]">
+          <div className="max-w-[680px]">
 
-            {/* Eyebrow */}
+            {/* Eyebrow — HIG Caption style */}
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -64,31 +64,46 @@ export default function Home() {
               className="inline-flex items-center gap-2 mb-8"
             >
               <span
-                className="text-xs font-semibold uppercase tracking-widest"
-                style={{ color: "var(--rc-accent)" }}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[13px] font-semibold tracking-wide"
+                style={{
+                  background: "var(--sys-blue-subtle)",
+                  color: "var(--sys-blue)",
+                  border: "1px solid var(--sys-blue-subtle-border)",
+                }}
               >
+                {/* Small pulsing dot — Depth */}
+                <span
+                  className="w-1.5 h-1.5 rounded-full animate-pulse"
+                  style={{ background: "var(--sys-blue)" }}
+                  aria-hidden="true"
+                />
                 Powered by Cohere Command R+
               </span>
             </motion.div>
 
-            {/* Headline */}
+            {/* Headline — SF Pro heavy weight, no serif */}
+            {/* HIG: SF carries the hierarchy. One family, weight for hierarchy. */}
             <motion.h1
-              className="text-5xl md:text-[68px] lg:text-[80px] leading-[1.0] tracking-tight mb-7"
-              style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontWeight: 400, letterSpacing: "-0.015em" }}
+              className="text-[52px] md:text-[68px] lg:text-[80px] leading-[1.0] mb-7"
+              style={{
+                fontWeight: 800,
+                letterSpacing: "-0.03em",
+                lineHeight: 1.0,
+              }}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
             >
               Research reports
               <br />
-              <em style={{ fontStyle: "italic", color: "var(--rc-accent)" }}>
+              <span style={{ color: "var(--sys-blue)" }}>
                 that cite their sources.
-              </em>
+              </span>
             </motion.h1>
 
-            {/* Subheading */}
+            {/* Subheading — HIG body (17px) */}
             <motion.p
-              className="text-lg md:text-xl leading-relaxed mb-10 max-w-[520px]"
+              className="text-[17px] md:text-[19px] leading-relaxed mb-10 max-w-[500px]"
               style={{ color: "var(--text-secondary)" }}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -98,7 +113,7 @@ export default function Home() {
               sources in under a minute — no manual search, no tab juggling.
             </motion.p>
 
-            {/* CTAs */}
+            {/* CTAs — pill buttons, 44pt minimum */}
             <motion.div
               className="flex flex-wrap gap-3"
               initial={{ opacity: 0, y: 16 }}
@@ -108,7 +123,7 @@ export default function Home() {
               <Link
                 href="/research"
                 id="hero-cta-primary"
-                className="btn-zephyr btn-zephyr-primary px-7 py-3 text-[15px] inline-flex items-center gap-2"
+                className="btn-zephyr btn-zephyr-primary px-7 inline-flex items-center gap-2 text-[16px]"
               >
                 Start a report
                 <ArrowRight size={16} aria-hidden="true" />
@@ -116,7 +131,7 @@ export default function Home() {
               <a
                 href="#how-it-works"
                 id="hero-cta-secondary"
-                className="btn-zephyr btn-zephyr-secondary px-7 py-3 text-[15px]"
+                className="btn-zephyr btn-zephyr-secondary px-7 text-[16px]"
               >
                 See how it works
               </a>
@@ -135,18 +150,15 @@ export default function Home() {
 
             <FadeInSection>
               <div>
-                <span
-                  className="section-rule mb-6 block"
-                  aria-hidden="true"
-                />
+                <span className="section-rule mb-6 block" aria-hidden="true" />
+                {/* HIG Title1 — 28px, 700 weight */}
                 <h2
-                  className="text-3xl md:text-4xl font-semibold tracking-tight mb-6"
-                  style={{ letterSpacing: "-0.02em" }}
+                  className="type-title1 mb-6"
                 >
                   One result, not a list of links.
                 </h2>
                 <p
-                  className="text-base md:text-lg leading-relaxed"
+                  className="type-body leading-relaxed"
                   style={{ color: "var(--text-secondary)" }}
                 >
                   Traditional search returns ten URLs. ReportCraft reads those
@@ -154,7 +166,7 @@ export default function Home() {
                   coherent report — structured, cited, and ready to use.
                 </p>
                 <p
-                  className="text-base leading-relaxed mt-4"
+                  className="type-body leading-relaxed mt-4"
                   style={{ color: "var(--text-secondary)" }}
                 >
                   Built for analysts, students, journalists, and curious people
@@ -163,33 +175,29 @@ export default function Home() {
               </div>
             </FadeInSection>
 
-            {/* Report preview mock */}
+            {/* Report preview — Liquid Glass card */}
             <FadeInSection direction="left" delay={0.15}>
               <div
-                className="rounded-lg overflow-hidden border"
-                style={{
-                  background: "var(--card-bg)",
-                  borderColor: "var(--border)",
-                }}
+                className="glass-card overflow-hidden"
                 aria-hidden="true"
               >
                 {/* Browser chrome */}
                 <div
                   className="flex items-center gap-2 px-4 py-3 border-b"
                   style={{
-                    background: "var(--surface)",
+                    background: "var(--sys-secondary-background)",
                     borderColor: "var(--border)",
                   }}
                 >
                   <div className="flex gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-400/60" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400/60" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/60" />
+                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: "var(--sys-red)" }} />
+                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: "var(--sys-orange)" }} />
+                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: "var(--sys-green)" }} />
                   </div>
                   <div
-                    className="ml-2 h-5 w-44 rounded border px-2 flex items-center text-[10px] font-mono truncate"
+                    className="ml-2 h-5 w-44 rounded-full border px-3 flex items-center text-[10px] font-mono truncate"
                     style={{
-                      background: "var(--background)",
+                      background: "var(--sys-tertiary-background)",
                       borderColor: "var(--border)",
                       color: "var(--text-tertiary)",
                     }}
@@ -202,13 +210,17 @@ export default function Home() {
                 <div className="p-6 space-y-5">
                   <div>
                     <div
-                      className="text-[9px] font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"
-                      style={{ color: "var(--rc-accent)" }}
+                      className="type-caption2 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"
+                      style={{ color: "var(--sys-blue)", letterSpacing: "0.08em" }}
                     >
+                      <span
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ background: "var(--sys-blue)" }}
+                      />
                       Live Web Synthesis
                     </div>
                     <div
-                      className="text-xl font-semibold tracking-tight"
+                      className="type-title3"
                       style={{ color: "var(--text-primary)" }}
                     >
                       The Future of CRISPR Editing
@@ -216,27 +228,27 @@ export default function Home() {
                   </div>
 
                   <div
-                    className="space-y-2.5 p-4 rounded-md border"
+                    className="space-y-2.5 p-4 rounded-xl border"
                     style={{
-                      background: "var(--surface)",
-                      borderColor: "var(--border)",
+                      background: "var(--sys-blue-subtle)",
+                      borderColor: "var(--sys-blue-subtle-border)",
                     }}
                   >
                     {[0.8, 0.65, 0.9].map((w, i) => (
                       <div key={i} className="flex items-center gap-3">
                         <div
-                          className="h-3.5 w-3.5 rounded flex items-center justify-center shrink-0"
+                          className="h-4 w-4 rounded-full flex items-center justify-center shrink-0"
                           style={{
-                            background: "var(--rc-accent-subtle)",
+                            background: "var(--sys-blue)",
                           }}
                         >
-                          <Check size={8} style={{ color: "var(--rc-accent)" }} />
+                          <Check size={8} style={{ color: "#ffffff" }} />
                         </div>
                         <div
-                          className="h-1.5 rounded"
+                          className="h-1.5 rounded-full"
                           style={{
                             width: `${w * 100}%`,
-                            background: "var(--border-hover)",
+                            background: "var(--sys-gray4)",
                           }}
                         />
                       </div>
@@ -249,18 +261,18 @@ export default function Home() {
                   >
                     <div className="flex items-center gap-2 mb-3">
                       <div
-                        className="h-2 w-1/4 rounded"
+                        className="h-2 w-1/4 rounded-full"
                         style={{
                           background: "var(--text-secondary)",
                           opacity: 0.5,
                         }}
                       />
                       <div
-                        className="px-1.5 py-0.5 rounded text-[9px] font-semibold border"
+                        className="px-2 py-0.5 rounded-full text-[9px] font-semibold border"
                         style={{
-                          background: "var(--rc-accent-subtle)",
-                          borderColor: "var(--rc-accent-subtle-border)",
-                          color: "var(--rc-accent)",
+                          background: "var(--sys-blue-subtle)",
+                          borderColor: "var(--sys-blue-subtle-border)",
+                          color: "var(--sys-blue)",
                         }}
                       >
                         [1] Nature
@@ -270,10 +282,10 @@ export default function Home() {
                       {[1, 0.9, 0.75].map((w, i) => (
                         <div
                           key={i}
-                          className="h-1.5 rounded"
+                          className="h-1.5 rounded-full"
                           style={{
                             width: `${w * 100}%`,
-                            background: "var(--border-hover)",
+                            background: "var(--sys-gray4)",
                           }}
                         />
                       ))}
@@ -290,24 +302,19 @@ export default function Home() {
       <section
         className="py-20 md:py-28 border-t"
         style={{
-          background: "var(--surface)",
+          background: "var(--sys-grouped-background)",
           borderColor: "var(--border)",
         }}
       >
         <div className="mx-auto max-w-[1200px] px-5 md:px-8">
           <FadeInSection className="mb-14">
             <span className="section-rule mb-5 block" aria-hidden="true" />
-            <h2
-              className="text-2xl md:text-3xl font-semibold tracking-tight"
-              style={{ letterSpacing: "-0.02em" }}
-            >
+            <h2 className="type-title2">
               How it works
             </h2>
           </FadeInSection>
 
-          <StaggerContainer className="grid gap-px border rounded-lg overflow-hidden"
-            style={{ borderColor: "var(--border)" } as React.CSSProperties}
-          >
+          <StaggerContainer className="grid gap-px border rounded-2xl overflow-hidden">
             {capabilities.map((cap, i) => (
               <StaggerItem key={i}>
                 <div
@@ -316,20 +323,23 @@ export default function Home() {
                 >
                   <div className="flex gap-8 items-start">
                     <span
-                      className="text-xs font-mono font-semibold mt-0.5 shrink-0 w-5"
-                      style={{ color: "var(--text-tertiary)" }}
+                      className="type-caption1 font-semibold mt-0.5 shrink-0 w-5 tabular-nums"
+                      style={{
+                        color: "var(--sys-blue)",
+                        fontVariantNumeric: "tabular-nums",
+                      }}
                     >
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <div>
                       <h3
-                        className="text-base font-semibold mb-2 tracking-tight"
+                        className="type-headline mb-2"
                         style={{ color: "var(--text-primary)" }}
                       >
                         {cap.title}
                       </h3>
                       <p
-                        className="text-sm leading-relaxed"
+                        className="type-callout leading-relaxed"
                         style={{ color: "var(--text-secondary)" }}
                       >
                         {cap.desc}
@@ -352,38 +362,35 @@ export default function Home() {
         <div className="mx-auto max-w-[1200px] px-5 md:px-8">
           <FadeInSection className="mb-14">
             <span className="section-rule mb-5 block" aria-hidden="true" />
-            <h2
-              className="text-2xl md:text-3xl font-semibold tracking-tight"
-              style={{ letterSpacing: "-0.02em" }}
-            >
+            <h2 className="type-title2">
               Three steps, under a minute.
             </h2>
           </FadeInSection>
 
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-4 lg:grid-cols-3">
             {steps.map((step, idx) => (
               <FadeInSection key={step.step} delay={idx * 0.08}>
-                <div
-                  className="card-clean p-8 h-full hover:border-[var(--border-hover)] transition-colors"
-                >
+                {/* Liquid Glass step card */}
+                <div className="glass-card p-8 h-full interactive-card">
                   <span
-                    className="block text-4xl font-light mb-6 select-none"
+                    className="block text-[40px] font-black mb-6 select-none leading-none"
                     style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      color: "var(--border-hover)",
+                      color: "var(--sys-blue-subtle-border)",
+                      letterSpacing: "-0.04em",
+                      fontVariantNumeric: "tabular-nums",
                     }}
                     aria-hidden="true"
                   >
                     {step.step}
                   </span>
                   <h3
-                    className="text-base font-semibold tracking-tight mb-3"
+                    className="type-headline mb-3"
                     style={{ color: "var(--text-primary)" }}
                   >
                     {step.title}
                   </h3>
                   <p
-                    className="text-sm leading-relaxed"
+                    className="type-callout leading-relaxed"
                     style={{ color: "var(--text-secondary)" }}
                   >
                     {step.description}
@@ -398,26 +405,29 @@ export default function Home() {
       {/* ========== FINAL CTA ========== */}
       <section
         className="py-24 md:py-32 px-5 md:px-8 border-t"
-        style={{ borderColor: "var(--border)" }}
+        style={{
+          borderColor: "var(--border)",
+          background: "var(--sys-grouped-background)",
+        }}
       >
-        <div className="mx-auto max-w-[680px] text-center">
+        <div className="mx-auto max-w-[600px] text-center">
           <FadeInSection>
+            {/* HIG: SF Pro 800 weight for display moments */}
             <h2
-              className="text-4xl md:text-5xl font-semibold tracking-tight mb-5"
+              className="text-[40px] md:text-[52px] mb-5"
               style={{
-                fontFamily: "'Instrument Serif', Georgia, serif",
-                fontWeight: 400,
-                letterSpacing: "-0.015em",
+                fontWeight: 800,
+                letterSpacing: "-0.028em",
+                lineHeight: 1.05,
               }}
             >
-              Pick a topic.
-              <br />
-              <em style={{ fontStyle: "italic", color: "var(--rc-accent)" }}>
+              Pick a topic.{" "}
+              <span style={{ color: "var(--sys-blue)" }}>
                 See what comes back.
-              </em>
+              </span>
             </h2>
             <p
-              className="text-base md:text-lg mb-8 max-w-sm mx-auto leading-relaxed"
+              className="type-body mb-8 max-w-sm mx-auto leading-relaxed"
               style={{ color: "var(--text-secondary)" }}
             >
               No signup required. Any topic, cited report in under a minute.
@@ -425,7 +435,7 @@ export default function Home() {
             <Link
               href="/research"
               id="final-cta"
-              className="btn-zephyr btn-zephyr-primary px-10 py-3.5 text-base inline-flex items-center gap-2"
+              className="btn-zephyr btn-zephyr-primary px-10 text-[17px] inline-flex items-center gap-2"
             >
               Start a report
               <ArrowRight size={17} aria-hidden="true" />
