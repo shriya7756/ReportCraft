@@ -24,7 +24,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import toast from "react-hot-toast";
-import type { Metadata } from "next";
 
 interface Report {
   id: string;
@@ -154,7 +153,7 @@ export default function DashboardPage() {
         <Loader2
           className="animate-spin"
           size={32}
-          style={{ color: "var(--rc-accent)" }}
+          style={{ color: "var(--sys-blue)" }}
           aria-label="Loading"
         />
       </div>
@@ -197,41 +196,43 @@ export default function DashboardPage() {
         <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between mb-12">
           <div>
             <h1
-              className="text-3xl md:text-4xl font-semibold tracking-tight mb-1.5"
-              style={{ letterSpacing: "-0.02em", color: "var(--text-primary)" }}
+              className="type-large-title mb-1.5"
+              style={{ color: "var(--text-primary)" }}
             >
               Your reports
             </h1>
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.9375rem" }}>
+            <p className="type-body" style={{ color: "var(--text-secondary)" }}>
               Reports you&apos;ve generated, with sources and quick actions.
             </p>
           </div>
+          {/* 44pt CTA button */}
           <Link
             href="/research"
-            className="btn-zephyr btn-zephyr-primary px-6 py-2.5 text-sm flex items-center gap-2 self-start sm:self-auto"
+            className="btn-zephyr btn-zephyr-primary px-6 inline-flex items-center gap-2 self-start sm:self-auto type-callout"
             id="new-report-btn"
           >
-            <Plus size={15} aria-hidden="true" />
+            <Plus size={16} aria-hidden="true" />
             New report
           </Link>
         </header>
 
-        {/* Stat tiles */}
+        {/* Stat tiles — Liquid Glass */}
         <StaggerContainer className="grid gap-4 grid-cols-2 lg:grid-cols-4 mb-12">
           {statTiles.map((stat, i) => (
             <StaggerItem key={i}>
-              <div className="card-clean p-5">
-                <div className="mb-3" style={{ color: "var(--text-tertiary)" }}>
-                  <stat.icon size={16} aria-hidden="true" />
+              <div className="glass-card p-5">
+                {/* systemBlue icon tint */}
+                <div className="mb-3" style={{ color: "var(--sys-blue)" }}>
+                  <stat.icon size={17} aria-hidden="true" />
                 </div>
                 <div
-                  className="text-2xl font-semibold tracking-tight mb-1"
+                  className="type-title2 mb-1"
                   style={{ color: "var(--text-primary)" }}
                 >
                   <CountUp end={stat.value} />
                 </div>
                 <div
-                  className="text-xs font-medium"
+                  className="type-caption1"
                   style={{ color: "var(--text-tertiary)" }}
                 >
                   {stat.label}
@@ -248,13 +249,13 @@ export default function DashboardPage() {
             style={{ borderColor: "var(--border)" }}
           >
             <h2
-              className="text-base font-semibold"
+              className="type-headline"
               style={{ color: "var(--text-primary)" }}
             >
               Report history
             </h2>
             <span
-              className="text-xs font-medium px-2.5 py-1 rounded border"
+              className="type-caption1 font-medium px-3 py-1 rounded-full border"
               style={{
                 color: "var(--text-secondary)",
                 borderColor: "var(--border)",
@@ -277,7 +278,7 @@ export default function DashboardPage() {
                   transition={{ duration: 0.2, ease: "circOut" }}
                   className="card-clean group overflow-hidden"
                 >
-                  {/* Delete confirmation */}
+                  {/* Delete confirmation — systemRed */}
                   <AnimatePresence>
                     {deletingId === r.id && (
                       <motion.div
@@ -286,32 +287,30 @@ export default function DashboardPage() {
                         exit={{ opacity: 0 }}
                         className="px-5 py-3.5 flex items-center justify-between gap-4 border-b"
                         style={{
-                          background: "rgba(239,68,68,0.04)",
-                          borderColor: "rgba(239,68,68,0.15)",
+                          background: "var(--sys-red-subtle)",
+                          borderColor: "var(--sys-red-subtle-border)",
                         }}
                       >
                         <p
-                          className="text-sm font-medium"
+                          className="type-callout font-medium"
                           style={{ color: "var(--text-primary)" }}
                         >
                           Delete &quot;{r.title}&quot;? This cannot be undone.
                         </p>
                         <div className="flex items-center gap-2 shrink-0">
+                          {/* 44pt delete confirm — systemRed */}
                           <button
                             onClick={() => executeDelete(r.id)}
-                            className="px-3.5 py-1.5 text-xs font-semibold bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                            className="btn-zephyr btn-zephyr-danger px-4 type-footnote"
+                            style={{ minHeight: "36px" }}
                             aria-label={`Confirm delete "${r.title}"`}
                           >
                             Delete
                           </button>
                           <button
                             onClick={cancelDelete}
-                            className="px-3.5 py-1.5 text-xs font-semibold rounded-md transition-colors"
-                            style={{
-                              background: "var(--surface)",
-                              border: "1px solid var(--border)",
-                              color: "var(--text-secondary)",
-                            }}
+                            className="btn-zephyr btn-zephyr-ghost px-4 type-footnote"
+                            style={{ minHeight: "36px" }}
                             aria-label="Cancel delete"
                           >
                             Cancel
@@ -325,15 +324,15 @@ export default function DashboardPage() {
                     {/* Left: icon + info */}
                     <div className="flex items-center gap-4 flex-1 min-w-0">
                       <div
-                        className="h-9 w-9 shrink-0 flex items-center justify-center rounded-md border transition-colors"
+                        className="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl border transition-colors"
                         style={{
-                          background: "var(--surface)",
-                          borderColor: "var(--border)",
-                          color: "var(--text-tertiary)",
+                          background: "var(--sys-blue-subtle)",
+                          borderColor: "var(--sys-blue-subtle-border)",
+                          color: "var(--sys-blue)",
                         }}
                         aria-hidden="true"
                       >
-                        <FileText size={15} />
+                        <FileText size={16} />
                       </div>
                       <div className="min-w-0 flex-1">
                         {renamingId === r.id ? (
@@ -349,19 +348,20 @@ export default function DashboardPage() {
                               onKeyDown={(e) =>
                                 e.key === "Enter" && executeRename(r.id)
                               }
-                              className="zephyr-input py-1.5 px-3 text-sm"
+                              className="zephyr-input type-callout"
+                              style={{ minHeight: "36px", padding: "6px 12px" }}
                               autoFocus
                             />
                             <button
                               onClick={() => executeRename(r.id)}
-                              className="text-xs font-semibold transition-colors"
-                              style={{ color: "var(--rc-accent)" }}
+                              className="type-callout font-semibold transition-colors"
+                              style={{ color: "var(--sys-blue)" }}
                             >
                               Save
                             </button>
                             <button
                               onClick={cancelRename}
-                              className="text-xs font-semibold transition-colors"
+                              className="type-callout font-semibold transition-colors"
                               style={{ color: "var(--text-secondary)" }}
                             >
                               Cancel
@@ -370,13 +370,13 @@ export default function DashboardPage() {
                         ) : (
                           <>
                             <h3
-                              className="text-sm font-semibold tracking-tight truncate capitalize"
+                              className="type-callout font-semibold truncate capitalize"
                               style={{ color: "var(--text-primary)" }}
                             >
                               {r.title}
                             </h3>
                             <div
-                              className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 mt-0.5 text-xs"
+                              className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 mt-0.5 type-footnote"
                               style={{ color: "var(--text-tertiary)" }}
                             >
                               <span>{r.date}</span>
@@ -398,11 +398,11 @@ export default function DashboardPage() {
                       </div>
                     </div>
 
-                    {/* Actions */}
-                    <div className="flex items-center gap-1.5 shrink-0">
+                    {/* Actions — all 44pt touch targets */}
+                    <div className="flex items-center gap-1 shrink-0">
                       <button
                         onClick={() => handleExport(r)}
-                        className="p-2 rounded-md border transition-colors hover:border-[var(--rc-accent)] hover:text-[var(--rc-accent)]"
+                        className="w-[44px] h-[44px] flex items-center justify-center rounded-xl border transition-all hover:border-[var(--sys-blue)] hover:text-[var(--sys-blue)] hover:bg-[var(--sys-blue-subtle)]"
                         style={{
                           borderColor: "var(--border)",
                           color: "var(--text-tertiary)",
@@ -414,7 +414,7 @@ export default function DashboardPage() {
                       </button>
                       <button
                         onClick={() => confirmRename(r)}
-                        className="p-2 rounded-md border transition-colors hover:border-[var(--rc-accent)] hover:text-[var(--rc-accent)]"
+                        className="w-[44px] h-[44px] flex items-center justify-center rounded-xl border transition-all hover:border-[var(--sys-blue)] hover:text-[var(--sys-blue)] hover:bg-[var(--sys-blue-subtle)]"
                         style={{
                           borderColor: "var(--border)",
                           color: "var(--text-tertiary)",
@@ -426,7 +426,7 @@ export default function DashboardPage() {
                       </button>
                       <button
                         onClick={() => confirmDelete(r.id)}
-                        className="p-2 rounded-md border transition-colors hover:border-red-400 hover:text-red-500"
+                        className="w-[44px] h-[44px] flex items-center justify-center rounded-xl border transition-all hover:border-[var(--sys-red)] hover:text-[var(--sys-red)] hover:bg-[var(--sys-red-subtle)]"
                         style={{
                           borderColor: "var(--border)",
                           color: "var(--text-tertiary)",
@@ -436,9 +436,11 @@ export default function DashboardPage() {
                       >
                         <Trash2 size={15} aria-hidden="true" />
                       </button>
+                      {/* View — pill, systemBlue */}
                       <button
                         onClick={() => viewReport(r)}
-                        className="btn-zephyr btn-zephyr-primary p-2 ml-1"
+                        className="btn-zephyr btn-zephyr-primary ml-1"
+                        style={{ minHeight: "36px", minWidth: "36px", padding: "0 12px" }}
                         aria-label={`Open report: ${r.title}`}
                         title="Open report"
                       >
@@ -457,7 +459,7 @@ export default function DashboardPage() {
                 action={
                   <Link
                     href="/research"
-                    className="btn-zephyr btn-zephyr-primary px-7 py-3 text-sm"
+                    className="btn-zephyr btn-zephyr-primary px-7 type-callout"
                     id="first-report-btn"
                   >
                     Start your first report
