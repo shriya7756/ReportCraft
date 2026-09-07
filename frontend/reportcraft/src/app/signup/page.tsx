@@ -44,7 +44,7 @@ export default function SignupPage() {
   return (
     <div
       className="min-h-[88vh] flex items-center justify-center py-16 px-5"
-      style={{ background: "var(--background)" }}
+      style={{ background: "var(--sys-grouped-background)" }}
     >
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -52,16 +52,16 @@ export default function SignupPage() {
         transition={{ duration: 0.35 }}
         className="w-full max-w-[400px]"
       >
-        <div className="card-clean p-8">
+        <div className="glass-card p-8">
           {/* Header */}
           <div className="mb-7">
             <h1
-              className="text-2xl font-semibold tracking-tight mb-1.5"
-              style={{ letterSpacing: "-0.02em", color: "var(--text-primary)" }}
+              className="type-title2 mb-1.5"
+              style={{ color: "var(--text-primary)" }}
             >
               Create account
             </h1>
-            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+            <p className="type-callout" style={{ color: "var(--text-secondary)" }}>
               Start researching any topic in seconds.
             </p>
           </div>
@@ -71,11 +71,11 @@ export default function SignupPage() {
             <div
               role="alert"
               aria-live="assertive"
-              className="mb-5 px-4 py-3 rounded-md border text-sm font-medium"
+              className="mb-5 px-4 py-3 rounded-xl border type-callout font-medium"
               style={{
-                background: "rgba(239,68,68,0.05)",
-                borderColor: "rgba(239,68,68,0.2)",
-                color: "#dc2626",
+                background: "var(--sys-red-subtle)",
+                borderColor: "var(--sys-red-subtle-border)",
+                color: "var(--sys-red)",
               }}
             >
               {error}
@@ -87,7 +87,8 @@ export default function SignupPage() {
             <div className="space-y-2">
               <label
                 htmlFor="signup-email"
-                className="block text-sm font-semibold text-[var(--text-secondary)]"
+                className="block type-subhead font-medium"
+                style={{ color: "var(--text-secondary)" }}
               >
                 Email
               </label>
@@ -118,7 +119,8 @@ export default function SignupPage() {
             <div className="space-y-2">
               <label
                 htmlFor="signup-password"
-                className="block text-sm font-semibold text-[var(--text-secondary)]"
+                className="block type-subhead font-medium"
+                style={{ color: "var(--text-secondary)" }}
               >
                 Password
               </label>
@@ -144,14 +146,15 @@ export default function SignupPage() {
                 />
                 <button
                   type="button"
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors"
+                  className="absolute right-0 top-0 bottom-0 w-[44px] flex items-center justify-center rounded-r-[10px] transition-colors"
+                  style={{ color: "var(--text-tertiary)" }}
                   onClick={() => setShowPass(!showPass)}
                   aria-label={showPass ? "Hide password" : "Show password"}
                 >
                   {showPass ? (
-                    <EyeOff size={17} aria-hidden="true" />
+                    <EyeOff size={16} aria-hidden="true" />
                   ) : (
-                    <Eye size={17} aria-hidden="true" />
+                    <Eye size={16} aria-hidden="true" />
                   )}
                 </button>
               </div>
@@ -161,7 +164,8 @@ export default function SignupPage() {
             <div className="space-y-2">
               <label
                 htmlFor="signup-confirm"
-                className="block text-sm font-semibold text-[var(--text-secondary)]"
+                className="block type-subhead font-medium"
+                style={{ color: "var(--text-secondary)" }}
               >
                 Confirm password
               </label>
@@ -187,14 +191,15 @@ export default function SignupPage() {
                 />
                 <button
                   type="button"
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors"
+                  className="absolute right-0 top-0 bottom-0 w-[44px] flex items-center justify-center rounded-r-[10px] transition-colors"
+                  style={{ color: "var(--text-tertiary)" }}
                   onClick={() => setShowConfirm(!showConfirm)}
                   aria-label={showConfirm ? "Hide confirm password" : "Show confirm password"}
                 >
                   {showConfirm ? (
-                    <EyeOff size={17} aria-hidden="true" />
+                    <EyeOff size={16} aria-hidden="true" />
                   ) : (
-                    <Eye size={17} aria-hidden="true" />
+                    <Eye size={16} aria-hidden="true" />
                   )}
                 </button>
               </div>
@@ -205,11 +210,11 @@ export default function SignupPage() {
               type="submit"
               id="signup-submit"
               disabled={isSubmitting}
-              className="btn-zephyr btn-zephyr-primary w-full py-3 text-sm flex items-center justify-center gap-2 mt-1"
+              className="btn-zephyr btn-zephyr-primary w-full type-headline flex items-center justify-center gap-2 mt-1"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 size={15} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
                   Creating account…
                 </>
               ) : (
@@ -222,12 +227,12 @@ export default function SignupPage() {
             className="mt-6 pt-6 border-t text-center"
             style={{ borderColor: "var(--border)" }}
           >
-            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+            <p className="type-callout" style={{ color: "var(--text-secondary)" }}>
               Already have an account?{" "}
               <Link
                 href="/login"
                 className="font-semibold hover:underline"
-                style={{ color: "var(--rc-accent)" }}
+                style={{ color: "var(--sys-blue)" }}
               >
                 Sign in
               </Link>
