@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Instrument_Serif } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/components/AuthProvider";
@@ -7,24 +7,14 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Toaster } from "react-hot-toast";
 
+/*
+ * SF Pro and SF Mono are Apple system fonts — no import needed.
+ * Inter loads as the web fallback for non-Apple platforms.
+ */
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  subsets: ["latin"],
-  display: "swap",
-  weight: "400",
-  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -87,8 +77,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable} antialiased`}
-        style={{ fontFamily: "var(--font-inter, Inter), system-ui, sans-serif" }}
+        className={`${inter.variable} antialiased`}
+        style={{
+          fontFamily:
+            "'SF Pro Display', 'SF Pro Text', system-ui, -apple-system, BlinkMacSystemFont, var(--font-inter, Inter), sans-serif",
+        }}
       >
         <AuthProvider>
           <ThemeProvider>
@@ -107,7 +100,8 @@ export default function RootLayout({
                   background: "var(--card-bg)",
                   color: "var(--text-primary)",
                   border: "1px solid var(--border)",
-                  fontSize: "0.875rem",
+                  fontSize: "var(--type-footnote)",
+                  borderRadius: "var(--rc-radius-lg)",
                 },
               }}
             />
