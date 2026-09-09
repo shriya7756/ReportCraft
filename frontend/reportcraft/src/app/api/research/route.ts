@@ -52,7 +52,7 @@ export async function POST(request: Request) {
           "X-Client-Name": "ReportCraft",
         },
         body: JSON.stringify({
-          model: "command-r-plus-08-2024",
+          model: "command-r7b-12-2024",
           messages: [
             {
               role: "system",
