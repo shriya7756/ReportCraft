@@ -44,19 +44,20 @@ export async function POST(request: Request) {
 
     let cohereContent = "";
     try {
-      const cohereRes = await fetch("https://api.cohere.com/v2/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-          "X-Client-Name": "ReportCraft",
-        },
-        body: JSON.stringify({
-          model: "command-r7b-12-2024",
-          messages: [
-            {
-              role: "system",
-              content: `You are a research scientist. Write a concise research report using ONLY the context below. Do not fabricate facts not present in the context.
+      const callCohere = async (modelName: string) => {
+        return await fetch("https://api.cohere.com/v2/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+            "X-Client-Name": "ReportCraft",
+          },
+          body: JSON.stringify({
+            model: modelName,
+            messages: [
+              {
+                role: "system",
+                content: `You are a research scientist. Write a concise research report using ONLY the context below. Do not fabricate facts not present in the context.
 
 Use these EXACT headers on their own lines (no markdown formatting like ## or **):
 ABSTRACT:
@@ -68,17 +69,24 @@ Write 3–4 sentences per section. Be specific and factual. Reference the articl
 
 CONTEXT:
 ${context}`,
-            },
-            {
-              role: "user",
-              content: `Write a research report on: "${cleanTopic}"`,
-            },
-          ],
-          temperature: 0.1,
-          max_tokens: 600,
-        }),
-        signal: controller.signal,
-      });
+              },
+              {
+                role: "user",
+                content: `Write a research report on: "${cleanTopic}"`,
+              },
+            ],
+            temperature: 0.1,
+            max_tokens: 600,
+          }),
+          signal: controller.signal,
+        });
+      };
+
+      let cohereRes = await callCohere("command-r7b-12-2024");
+      if (!cohereRes.ok && cohereRes.status !== 401 && cohereRes.status !== 403) {
+        // Fallback to command-r-08-2024 if primary fails
+        cohereRes = await callCohere("command-r-08-2024");
+      }
 
       clearTimeout(timeout);
 
