@@ -49,7 +49,7 @@ Answer follow-up questions based on the report content and your knowledge about 
           temperature: 0.3,
           max_tokens: 600,
         }),
-        signal: AbortSignal.timeout(15000),
+        signal: AbortSignal.timeout(30000),
       });
 
       if (!cohereRes.ok) {
