@@ -1,4 +1,5 @@
 [build]
+  base = ""
   command = "cd frontend/reportcraft && npm install && npm run build"
   publish = "frontend/reportcraft/out"
 
