@@ -83,7 +83,7 @@ function ResearchContent() {
     ];
 
     const controller = new AbortController();
-    const hardTimeout = setTimeout(() => controller.abort(), 30000);
+    const hardTimeout = setTimeout(() => controller.abort(), 60000);
 
     const backendPromise = fetch("/api/research", {
       method: "POST",
@@ -200,7 +200,7 @@ function ResearchContent() {
       const msg =
         error instanceof Error
           ? error.name === "AbortError"
-            ? "Research timed out. Please try again with a more specific topic."
+            ? "Research timed out. Please try again with a more specific topic or check your network connection."
             : error.message
           : "Research synthesis failed. Please try again.";
       toast.error(msg, { duration: 5000 });
