@@ -41,7 +41,7 @@ Answer follow-up questions based on the report content and your knowledge about 
           "X-Client-Name": "ReportCraft-chat",
         },
         body: JSON.stringify({
-          model: "command-r-plus-08-2024",
+          model: "command-r7b-12-2024",
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: message },
