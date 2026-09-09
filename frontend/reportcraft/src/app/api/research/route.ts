@@ -40,7 +40,7 @@ export async function POST(request: Request) {
 
     // 2. Call Cohere grounded on Web context
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 25000);
+    const timeout = setTimeout(() => controller.abort(), 45000);
 
     let cohereContent = "";
     try {
@@ -126,8 +126,8 @@ ${context}`,
 
     // Normalize inline markdown headers that Cohere sometimes adds
     const normalized = cohereContent
-      .replace(/##\s*(ABSTRACT|METHODOLOGY|ANALYSIS|CONCLUSION)\s*:/gi, "\n$1:\n")
-      .replace(/\*{1,2}(ABSTRACT|METHODOLOGY|ANALYSIS|CONCLUSION)\*{0,2}\s*:/gi, "\n$1:\n");
+      .replace(/#+\s*(ABSTRACT|METHODOLOGY|ANALYSIS|CONCLUSION)\s*:?/gi, "\n$1:\n")
+      .replace(/\*{1,2}(ABSTRACT|METHODOLOGY|ANALYSIS|CONCLUSION)\*{0,2}\s*:?/gi, "\n$1:\n");
 
     const abstract =
       extractSection(normalized, "ABSTRACT") ||
