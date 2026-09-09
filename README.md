@@ -21,7 +21,7 @@ ReportCraft is an LLM-powered research platform that generates structured, Wikip
 | 📄 **Structured Reports** | Well-organized reports with Abstract, Methodology, Analysis, and Conclusion sections |
 | 🔗 **Verifiable Citations** | Every claim backed by traceable Wikipedia and web sources |
 | 💬 **AI Chat** | Follow-up question assistant grounded in the same research context |
-| ⚡ **Serverless API** | Netlify Functions with sub-10-second response times |
+| ⚡ **Optimized API** | Serverless & Next.js API endpoints with sub-10-second response times |
 
 ---
 
